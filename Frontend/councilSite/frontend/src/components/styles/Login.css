@@ -1,0 +1,38 @@
+.Login-form-container {
+    background-color: rgb(139, 125, 106);
+    border-radius: 11px;
+    width: 40vw;
+    min-width: 200px;
+    height: 50%;
+    max-height: 50%;
+    min-height: 155px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Login-form {
+    width: 80%;
+
+}
+
+.Login-form label {
+    font-weight: bold;
+}
+
+.Login-form .Textfield {
+    background-color: rgb(223, 223, 221);
+    border-color: rgb(132, 111, 86);
+    border-radius: 5px;
+    width: 98%;
+    height: 35px;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.Login-button {
+    float: right;
+    background-color: rgb(205, 181, 152);
+    border-radius: 4px;
+    margin-top: 1%;
+}

@@ -1,6 +1,8 @@
 .navbar {
     background-color: rgb(139, 125, 106);
     height: 8%;
+    max-height: 50px;
     margin: auto;
+    z-index: 100;
 }
 

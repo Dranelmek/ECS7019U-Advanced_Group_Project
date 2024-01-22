@@ -1,10 +1,19 @@
+.App-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: black;
+  }
+
 .Login-form-container {
     background-color: rgb(139, 125, 106);
     border-radius: 11px;
     width: 40vw;
     min-width: 200px;
     height: 50%;
-    max-height: 50%;
+    max-height: 300px;
     min-height: 155px;
     display: flex;
     align-items: center;

@@ -1,4 +1,10 @@
+#logo {
+    max-width: 35px;
+    border-radius: 45px;
+}
+
 .navbar {
+    position: relative;
     background-color: rgb(139, 125, 106);
     height: 7%;
     max-height: 50px;
@@ -6,3 +12,38 @@
     z-index: 100;
 }
 
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.navbarContent ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    font-weight: bold;
+}
+
+.navbarContent ul li {
+    padding: 5px;
+    border-radius: 3px;
+    transition: 0.2s;
+}
+
+.navbarContent ul li:not(:last-child) {
+    margin-right: 60px;
+}
+
+.navbarContent ul a {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+}
+.navbarContent ul li:hover {
+    background-color: rgb(79, 71, 60);
+}

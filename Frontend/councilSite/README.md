@@ -7,7 +7,9 @@ Counsil Webpage
 
 #How to use:
 * Bullet points of how to use the stuff
+cd Frontend/councilsite/frontend
 npm start
+
     Starts the development server.
 
   npm run build

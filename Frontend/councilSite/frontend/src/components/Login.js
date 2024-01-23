@@ -2,7 +2,7 @@ import './styles/Login.css';
 
 function Login() {
     return (
-        <header className="App-header">
+        <header className="Login-header">
             <div className="Page-title">
             <p className="Login-title">Pothole Detection</p>
             <p className="Login-subtitle">Login</p>

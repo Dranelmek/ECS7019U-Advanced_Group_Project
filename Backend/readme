@@ -1,0 +1,5 @@
+1. You will need to download MongoDBCompass to start with, as the uni server is not working at the moment.
+2. Then create a database call groupProject.
+3. npm install --force
+4. npm start
+

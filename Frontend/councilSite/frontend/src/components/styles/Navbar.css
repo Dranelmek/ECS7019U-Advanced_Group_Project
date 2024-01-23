@@ -4,7 +4,8 @@
 }
 
 .navbar {
-    position: relative;
+    position: absolute;
+    width: 100vw;
     background-color: rgb(139, 125, 106);
     height: 7%;
     max-height: 50px;

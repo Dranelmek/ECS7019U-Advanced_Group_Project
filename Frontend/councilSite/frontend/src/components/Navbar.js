@@ -23,6 +23,10 @@ function testListener() {
     window.open("https://www.youtube.com/watch?v=e58hWzRS8iE")
 }
 
+function projectLink() {
+    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project")
+}
+
 function Navbar() {
 
     const [loggedIn, setLoggedIn] = useState(false);
@@ -38,12 +42,15 @@ function Navbar() {
                         <li>
                             <NavLink to="/">Home</NavLink>
                         </li>
-                        <li>
-                            Map
-                        </li>
                         <li onClick={() => setLoggedIn(!loggedIn)}>
                             {/* temporary toggle for logged in state */}
-                            Project
+                            Map
+                        </li>
+                        <li>
+                            Potholes
+                        </li>
+                        <li>
+                            <Link to="/" onClick={projectLink}>Project</Link>
                         </li>
                         {navLogin(loggedIn)}
                     </ul>

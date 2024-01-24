@@ -34,9 +34,9 @@ function Navbar() {
     return (
         <nav className='navbar'>
             <div className='container'>
-                <div className='logo' onClick={testListener}>
+                <Link to='/' className='logo' onClick={testListener}>
                     <img id='logo' src={logo} alt="Pothole Detector" />
-                </div>
+                </Link>
                 <div className='navbarContent'>
                     <ul>
                         <li>
@@ -47,7 +47,7 @@ function Navbar() {
                             Map
                         </li>
                         <li>
-                            Potholes
+                            <NavLink to="/potholes">Potholes</NavLink>
                         </li>
                         <li>
                             <Link to="/" onClick={projectLink}>Project</Link>

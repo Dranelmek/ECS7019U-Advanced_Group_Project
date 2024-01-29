@@ -1,0 +1,43 @@
+.list-entry {
+    background-color: rgb(245, 234, 219);
+    padding: 1vh 2vw;
+    border-radius: 7px;
+    margin: 7px 0;
+    width: 80%;
+    max-height: 120px;
+    display: flex;
+    flex-direction: row;
+    font-size: calc(10px + 2vmin);
+}
+
+.compact {
+    align-items: center;
+}
+
+.compact .pothole-image {
+    height: 100px;
+    margin-right: 3%;
+}
+
+.expand-button {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 10%;
+    padding: 2px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.expand-button:hover {
+    background-color: rgb(255, 248, 233);
+}
+
+
+.expand-button .expand-icon {
+    height: 25px;
+}

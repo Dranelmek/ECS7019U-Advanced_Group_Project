@@ -9,6 +9,7 @@
     background-color: rgb(139, 125, 106);
     height: 7%;
     max-height: 50px;
+    min-height: 35px;
     margin: auto;
     z-index: 100;
 }

@@ -1,7 +1,8 @@
 import './styles/Navbar.css';
 import { NavLink, Link } from 'react-router-dom';
 import logo from './assets/logo.jpg';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { LoginContext } from './App';
 
 function navLogin(check) {
     if (check) {
@@ -29,7 +30,7 @@ function projectLink() {
 
 function Navbar() {
 
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
 
     return (
         <nav className='navbar'>

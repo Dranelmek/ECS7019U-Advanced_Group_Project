@@ -1,11 +1,23 @@
 .List-header {
-    background-color: rgb(223, 223, 221);
-    height: fit-content;
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    padding-top: 7%;
-  }
+  background-color: rgb(223, 223, 221);
+  height: fit-content;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  padding-top: 6%;
+  padding-bottom: 50px;
+}
+
+.alone {
+  position: relative;
+  right: 38%;
+  padding-top: 5px;
+}
+
+.show-less-all {
+  display: flex;
+  justify-content: space-between;
+  gap: 70vw;
+}

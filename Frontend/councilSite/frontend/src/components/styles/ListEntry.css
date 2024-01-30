@@ -26,14 +26,13 @@
     height: 100px;
 }
 
+.expanded .pothole-image {
+    height: 225px;
+}
+
 .expanded {
     min-height: 200px;
     max-height: 300px;
-}
-
-.expanded .pothole-image {
-    height: 225;
-    width: auto;
 }
 
 .expanded .pothole-details {

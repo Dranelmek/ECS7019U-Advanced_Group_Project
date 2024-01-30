@@ -1,6 +1,5 @@
 import './styles/ListEntry.css'
 import { useState, useContext } from 'react'
-import test from './assets/test.json'
 import expanndIcon from './assets/expand-icon.png'
 import minIcon from './assets/mini-icon.png'
 import { Link } from 'react-router-dom'
@@ -8,7 +7,7 @@ import { LoginContext } from './App'
 
 
 
-function ListEntry() {
+function ListEntry(props) {
     
     function deleteButton(bool) {
         if (bool) {
@@ -19,6 +18,7 @@ function ListEntry() {
     }
 
     function deleteAlert() {
+        // TODO: add logic for api deletion
         window.alert("Deletion requested")
     }
 
@@ -36,18 +36,18 @@ function ListEntry() {
 
     if (isExpanded) {
         return (
-            <div className='list-entry expanded'>
-                <img src={test.image} alt="pothole" className='pothole-image'/>
+            <div className='list-entry expanded' id={props.id}>
+                <img src={props.pothole.image} alt="pothole" className='pothole-image'/>
                 <div className='description-box'>
                     <div className='pothole-location'>
-                        location: {test.location}
+                        location: {props.pothole.location}
                     </div>
                     <div className='pothole-details'>
                         <div className='pothole-video'>
-                            This pothole's video can be found <Link to={test.video}>here</Link>.
+                            This pothole's video can be found <Link to={`#${props.id}`} onClick={() => {window.open(props.pothole.video)}}>here</Link>.
                         </div>
                         <div className='pothole-severity'>
-                            {severity(test.repairment_needed)}
+                            {severity(props.pothole.repairment_needed)}
                         </div>
                     </div>
                 </div>
@@ -59,10 +59,10 @@ function ListEntry() {
         );
     } else {
         return (
-            <div className='list-entry compact'>
-                <img src={test.image} alt="pothole" className='pothole-image'/>
+            <div className='list-entry compact' id={props.id}>
+                <img src={props.pothole.image} alt="pothole" className='pothole-image'/>
                 <div className='pothole-location'>
-                    location: {test.location}
+                    location: {props.pothole.location}
                 </div>
                 <span className='expand-button' onClick={() => setIsExpanded(!isExpanded)}>
                     <img src={expanndIcon} alt="expand" className='expand-icon'/>

@@ -8,7 +8,7 @@ function Login() {
             <p className="Login-subtitle">Login</p>
             </div>
             <div className="Login-form-container">
-                <form className="Login-form">
+                <form className="Login-form" method='post' action='http://localhost:8800/'>
                     <label for="username" >Username:</label><br/>
                     <input type="text" id="username" name="username" className="Textfield"/><br/>
                     <label for="password">Password:</label><br/>

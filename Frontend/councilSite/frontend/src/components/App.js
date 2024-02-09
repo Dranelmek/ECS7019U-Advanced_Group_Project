@@ -8,6 +8,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { useState, useContext, createContext } from 'react';
 
 export const LoginContext = createContext()
+export const APILINK = "http://localhost:8800/"
 
 function App() {
   

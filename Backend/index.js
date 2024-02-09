@@ -10,7 +10,7 @@ dotenv.config();
 
 
 mongoose.connect(
-  `mongosh mongodb://ec20909:1eAAV3LF@ec20909-mongodb-0.ec20909-mongodb-svc.database-systems-ec20909.svc.cluster.local:27017/admin`,
+  `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`,
   { 
     useNewUrlParser: true, 
     useUnifiedTopology: true, 

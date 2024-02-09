@@ -2,10 +2,25 @@ import './styles/Potholes.css'
 import ListEntry from './ListEntry';
 import { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import potholeList from './assets/potholeList.json'
+import { APILINK } from './App';
 
 function Potholes() {
     
+    const [potholeList, setPotholeList] = useState([0])
+    useEffect(() => {
+        const  fetchPotholes = async () => {
+            const response = await fetch(
+                `${APILINK}pothole`,
+                {
+                    method: 'GET'
+                }
+            )
+            const data = await response.json()
+            setPotholeList(data)
+        }
+        fetchPotholes()
+    }, [])
+
     function changeListSize(size) {
         if (size <= 5) {
             return (

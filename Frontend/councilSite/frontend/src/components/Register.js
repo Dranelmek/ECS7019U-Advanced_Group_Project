@@ -70,13 +70,16 @@ function Register() {
         }
         const jsonData = JSON.stringify(fullData)
         const settings = {
+            headers: {
+                'Content-Type': 'application/json', // Specify the content type
+            },
             method: 'POST',
             body: jsonData
         };
         try {
             const fetchResponse = await fetch(loc, settings);
             const data = await fetchResponse.json();
-            window.alert(data)
+            window.alert("Account created!")
             return data;
         } catch (e) {
             window.alert(e)

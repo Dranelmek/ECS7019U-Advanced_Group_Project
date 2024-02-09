@@ -26,7 +26,7 @@ router.post("/addNewPothole", async (req, res) => {
       repairment_needed: req.body.repairment_needed
     });
 
-    //save new pothole and respond
+    //save user and respond
     const newPotholeDetail = await newPothole.save();
     res.status(200).json(newPotholeDetail);
 
@@ -41,7 +41,6 @@ router.post("/addNewPothole", async (req, res) => {
 //get a pothole by id
 router.get("/:id", async (req, res) => {
   try {
-    // Find the pothole by thier id
     const pothole = await Pothole.findById(req.params.id);
     res.status(200).json(pothole);
   } catch (err) {
@@ -55,8 +54,8 @@ router.get("/:id", async (req, res) => {
 // Delete a pothole
 router.delete("/deletePothole/:id", async (req, res) => {
   try {
-    // Delete a pothole by their id
     const pothole = await Pothole.remove({_id: req.params.id});
+
     res.status(200).json("Deleted pothole!");
   } catch (err) {
     res.status(500).json({ 
@@ -69,7 +68,7 @@ router.delete("/deletePothole/:id", async (req, res) => {
 // Delete all potholes
 router.delete("/deleteAllPotholes", async (req, res) => {
   try {
-    // Deleting all potholes
+    // Deleting all users
     const result = await Pothole.deleteMany({});
     res.status(200).json(result);
   } catch (err) {

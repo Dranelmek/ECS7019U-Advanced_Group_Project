@@ -10,8 +10,7 @@ dotenv.config();
 
 
 mongoose.connect(
-  // process.env.MONGO_URL,
-  "mongodb://localhost:27017/groupProject",
+  `mongosh mongodb://ec20909:1eAAV3LF@ec20909-mongodb-0.ec20909-mongodb-svc.database-systems-ec20909.svc.cluster.local:27017/admin`,
   { 
     useNewUrlParser: true, 
     useUnifiedTopology: true, 

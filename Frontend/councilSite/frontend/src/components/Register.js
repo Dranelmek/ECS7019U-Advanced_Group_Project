@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { APILINK } from './App';
+import axios from "axios";
 import './styles/Register.css';
+
 
 function Register() {
 
@@ -30,17 +32,46 @@ function Register() {
         
     }
 
-    async function createUser() {
-        const loc = `${APILINK}user/addStaff`;
-        const settings = {
-            method: 'POST',
-            body: {
+    async function submitUser() {
+        const newUser = JSON.stringify({
+            username: user,
+            password: pass,
+            user_first_name: name,
+            user_last_name: lName,
+            email: email
+        })
+        try {
+            await axios.post(`${APILINK}user/addStaff`, newUser);
+        } catch (error) {
+            
+        }
+    }
+
+    const test = () => {
+        console.log(
+            JSON.stringify({
                 'username': user,
                 'password': pass,
                 'user_first_name': name,
                 'user_last_name': lName,
                 'email': email
-            }
+            })
+        )
+    }
+
+    async function createUser() {
+        const loc = `${APILINK}user/addStaff`;
+        const fullData = {
+            'username': user,
+            'password': pass,
+            'user_first_name': name,
+            'user_last_name': lName,
+            'email': email
+        }
+        const jsonData = JSON.stringify(fullData)
+        const settings = {
+            method: 'POST',
+            body: jsonData
         };
         try {
             const fetchResponse = await fetch(loc, settings);
@@ -109,7 +140,7 @@ function Register() {
                     value={conf}
                     onChange={(e) => setConf(e.target.value)}
                     className="Textfield"/><br/>
-                    <input type="button" value="register" className="Register-button" onClick={handleLogin}/>
+                    <input type="button" value="register" className="Register-button" onClick={createUser}/>
                 </form>
             </div>
         </header>

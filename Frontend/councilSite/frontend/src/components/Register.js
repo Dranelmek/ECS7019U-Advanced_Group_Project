@@ -89,62 +89,64 @@ function Register() {
 
     return (
         <header className="Register-header">
-            <div className="Page-title">
-            <p className="Register-title">Pothole Detection</p>
-            <p className="Register-subtitle">Register</p>
-            </div>
-            <div className="Register-form-container">
-                <form className="Register-form" method='post'>
-                    <label for="username" >Username:</label><br/>
-                    <input 
-                    type="text" 
-                    id="username" 
-                    name="username" 
-                    value={user}
-                    onChange={(e) => setUser(e.target.value)}
-                    className="Textfield"/><br/>
-                    <label for="email">Email:</label><br/>
-                    <input 
-                    type="text" 
-                    id="email" 
-                    name="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="Textfield"/><br/>
-                    <label for="first-name">First Name:</label><br/>
-                    <input 
-                    type="text" 
-                    id="first-name" 
-                    name="first-name" 
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="Textfield"/><br/>
-                    <label for="last-name">Last Name:</label><br/>
-                    <input 
-                    type="text" 
-                    id="last-name" 
-                    name="last-name" 
-                    value={lName}
-                    onChange={(e) => setLName(e.target.value)}
-                    className="Textfield"/><br/>
-                    <label for="password">Password:</label><br/>
-                    <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    value={pass}
-                    onChange={(e) => setPass(e.target.value)}
-                    className="Textfield"/><br/>
-                    <label for="confirm">Confirm Password:</label><br/>
-                    <input 
-                    type="password" 
-                    id="confirm" 
-                    name="confirm" 
-                    value={conf}
-                    onChange={(e) => setConf(e.target.value)}
-                    className="Textfield"/><br/>
-                    <input type="button" value="register" className="Register-button" onClick={createUser}/>
-                </form>
+            <div className='Register-container'>
+                <div className="Page-title">
+                <p className="Register-title">Pothole Detection</p>
+                <p className="Register-subtitle">Register</p>
+                </div>
+                <div className="Register-form-container">
+                    <form className="Register-form" method='post'>
+                        <label for="username" >Username:</label><br/>
+                        <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        value={user}
+                        onChange={(e) => setUser(e.target.value)}
+                        className="Textfield"/><br/>
+                        <label for="email">Email:</label><br/>
+                        <input 
+                        type="text" 
+                        id="email" 
+                        name="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="Textfield"/><br/>
+                        <label for="first-name">First Name:</label><br/>
+                        <input 
+                        type="text" 
+                        id="first-name" 
+                        name="first-name" 
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="Textfield"/><br/>
+                        <label for="last-name">Last Name:</label><br/>
+                        <input 
+                        type="text" 
+                        id="last-name" 
+                        name="last-name" 
+                        value={lName}
+                        onChange={(e) => setLName(e.target.value)}
+                        className="Textfield"/><br/>
+                        <label for="password">Password:</label><br/>
+                        <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        value={pass}
+                        onChange={(e) => setPass(e.target.value)}
+                        className="Textfield"/><br/>
+                        <label for="confirm">Confirm Password:</label><br/>
+                        <input 
+                        type="password" 
+                        id="confirm" 
+                        name="confirm" 
+                        value={conf}
+                        onChange={(e) => setConf(e.target.value)}
+                        className="Textfield"/><br/>
+                        <input type="button" value="register" className="Register-button" onClick={createUser}/>
+                    </form>
+                </div>
             </div>
         </header>
     );

@@ -1,14 +1,17 @@
 .Login-header {
     background-color: rgb(223, 223, 221);
+    padding-top: 23vh;
+}
+
+.Login-container {
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: calc(10px + 2vmin);
+    font-size: calc(9px + 2vmin);
     color: black;
-  }
-
+}
 .Login-title {
     font-size: 70px;
 }
@@ -17,9 +20,9 @@
     border-radius: 11px;
     width: 40vw;
     min-width: 200px;
-    height: 50%;
+    height: 40vh;
     max-height: 300px;
-    min-height: 155px;
+    min-height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;

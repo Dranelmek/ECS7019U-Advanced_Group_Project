@@ -1,5 +1,9 @@
 .Register-header {
     background-color: rgb(223, 223, 221);
+    padding-top: 18vh;
+}
+
+.Register-container {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -7,7 +11,7 @@
     justify-content: center;
     font-size: calc(9px + 2vmin);
     color: black;
-  }
+}
 
 .Register-title {
     font-size: 70px;

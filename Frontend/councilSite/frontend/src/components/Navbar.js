@@ -9,7 +9,7 @@ function testListener() {
 }
 
 function projectLink() {
-    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project")
+    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project/tree/full")
 }
 
 function Navbar() {

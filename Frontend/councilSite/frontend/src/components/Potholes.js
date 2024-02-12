@@ -25,14 +25,13 @@ function Potholes() {
 
     
     useEffect(() => {
-        setCFA(potholeList.length)
         if (potholeList.length > 5) {
             setCFA(5)
         } 
-    }, [])
+    }, [potholeList])
 
     function changeListSize(size) {
-        if (potholeList.length <= size) {
+        if (potholeList.length < size) {
             return (
                 <div hidden>
                 </div>

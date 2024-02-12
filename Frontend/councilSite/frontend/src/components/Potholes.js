@@ -21,11 +21,11 @@ function Potholes() {
             setPotholeList(data)
         }
         fetchPotholes()
-        setCFA(potholeList.length)
     }, [])
 
     
     useEffect(() => {
+        setCFA(potholeList.length)
         if (potholeList.length > 5) {
             setCFA(5)
         } 

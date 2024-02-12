@@ -12,9 +12,11 @@
     font-size: calc(9px + 2vmin);
     color: black;
 }
+
 .Login-title {
     font-size: 70px;
 }
+
 .Login-form-container {
     background-color: rgb(139, 125, 106);
     border-radius: 11px;

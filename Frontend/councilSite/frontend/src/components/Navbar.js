@@ -2,23 +2,7 @@ import './styles/Navbar.css';
 import { NavLink, Link } from 'react-router-dom';
 import logo from './assets/logo.jpg';
 import { useContext, useState } from 'react';
-import { LoginContext } from './App';
-
-function navLogin(check) {
-    if (check) {
-        return (
-            <li>
-                Profile
-            </li>
-        );
-    } else {
-        return (
-            <li>
-                <NavLink to="/login">Login</NavLink>
-            </li>
-        );
-    }
-}
+import { LoginContext, UserContext } from './App';
 
 function testListener() {
     window.open("https://www.youtube.com/watch?v=e58hWzRS8iE")
@@ -30,7 +14,28 @@ function projectLink() {
 
 function Navbar() {
 
-    const [loggedIn, setLoggedIn] = useContext(LoginContext);
+    const loggedIn = useContext(LoginContext)[0];
+    const user = useContext(UserContext)[0];
+
+    function displayUser() {
+        window.alert(`Logged in as ${user.username}`)
+    }
+
+    function navLogin(check) {
+        if (check) {
+            return (
+                <li onClick={displayUser}>
+                    Profile
+                </li>
+            );
+        } else {
+            return (
+                <li>
+                    <NavLink to="/login">Login</NavLink>
+                </li>
+            );
+        }
+    }
 
     return (
         <nav className='navbar'>
@@ -43,8 +48,7 @@ function Navbar() {
                         <li>
                             <NavLink to="/">Home</NavLink>
                         </li>
-                        <li onClick={() => setLoggedIn(!loggedIn)}>
-                            {/* temporary toggle for logged in state */}
+                        <li>
                             Map
                         </li>
                         <li>

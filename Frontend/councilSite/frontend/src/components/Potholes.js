@@ -6,7 +6,9 @@ import { APILINK } from './App';
 
 function Potholes() {
     
+    const [CFA, setCFA] = useState(0)
     const [potholeList, setPotholeList] = useState([0])
+
     useEffect(() => {
         const  fetchPotholes = async () => {
             const response = await fetch(
@@ -19,10 +21,24 @@ function Potholes() {
             setPotholeList(data)
         }
         fetchPotholes()
+        setCFA(potholeList.length)
+    }, [])
+
+    
+    useEffect(() => {
+        if (potholeList.length > 5) {
+            setCFA(5)
+        } 
     }, [])
 
     function changeListSize(size) {
-        if (size <= 5) {
+        if (potholeList.length <= size) {
+            return (
+                <div hidden>
+                </div>
+            );
+            
+        } else if (size <= 5) {
             return (
                 <div className='show-more alone'>
                     <Link onClick={showMore}>Show more</Link>
@@ -67,15 +83,7 @@ function Potholes() {
     }
 
 
-    const [CFA, setCFA] = useState(0)
     
-    useEffect(() => {
-        if (potholeList.length > 5) {
-            setCFA(5)
-        } else {
-            setCFA(potholeList.length)
-        }
-    }, [])
 
     let holes = [...Array(CFA)].map((value, index) => (
         <ListEntry id={index} pothole={potholeList[index]}/>

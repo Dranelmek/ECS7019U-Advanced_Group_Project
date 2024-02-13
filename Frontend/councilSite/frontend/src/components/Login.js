@@ -34,9 +34,14 @@ function Login() {
         try {
             const fetchResponse = await fetch(loc, settings);
             const data = await fetchResponse.json();
-            window.alert(`Successfully logged in!`);
-            login(data)
-            return data;
+            if (data.username) {
+                window.alert(`Successfully logged in!`);
+                login(data)
+                console.log(data);
+            } else {
+                window.alert(`Something went wrong!`);
+            }
+            
         } catch (e) {
             window.alert(e)
         }

@@ -117,7 +117,7 @@ function Register() {
                         value={conf}
                         onChange={(e) => setConf(e.target.value)}
                         className="Textfield"/><br/>
-                        <input type="button" value="register" className="Register-button" onClick={handleLogin}/>
+                        <input type="button" value="Register" className="Register-button" onClick={handleLogin}/>
                     </form>
                 </div>
             </div>

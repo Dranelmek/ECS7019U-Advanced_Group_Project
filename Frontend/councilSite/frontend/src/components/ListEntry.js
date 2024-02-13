@@ -49,6 +49,9 @@ function ListEntry(props) {
                         <div className='pothole-severity'>
                             {severity(props.pothole.repairment_needed)}
                         </div>
+                        <div className='timestamp'>
+                            Timestamp: {new Date(props.pothole.createdAt).toLocaleString()}
+                        </div>
                     </div>
                 </div>
                 {deleteButton(loggedIn)}

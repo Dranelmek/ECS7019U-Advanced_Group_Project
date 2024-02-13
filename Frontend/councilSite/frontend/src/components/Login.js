@@ -37,7 +37,6 @@ function Login() {
             if (data.username) {
                 window.alert(`Successfully logged in!`);
                 login(data)
-                console.log(data);
             } else {
                 window.alert(`Something went wrong!`);
             }

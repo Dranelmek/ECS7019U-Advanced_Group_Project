@@ -1,5 +1,5 @@
 import './styles/Navbar.css';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import logo from './assets/logo.jpg';
 import { useContext, useState } from 'react';
 import { LoginContext, UserContext } from './App';
@@ -14,17 +14,14 @@ function projectLink() {
 
 function Navbar() {
 
-    const loggedIn = useContext(LoginContext)[0];
-    const user = useContext(UserContext)[0];
-
-    function displayUser() {
-        window.alert(`Logged in as ${user.username}`)
-    }
+    const [profileTrigger, setProfileTrigger] = useState(false);
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
+    const [user, setUser] = useContext(UserContext);
 
     function navLogin(check) {
         if (check) {
             return (
-                <li onClick={displayUser}>
+                <li onClick={() => setProfileTrigger(!profileTrigger)}>
                     Profile
                 </li>
             );
@@ -35,6 +32,20 @@ function Navbar() {
                 </li>
             );
         }
+    }
+
+    function display(bool) {
+        if (bool) {
+            return "profile-tab seen"
+        } else {
+            return "profile-tab unseen"
+        }
+    }
+
+    function logout() {
+        setUser({username: "No User"})
+        setLoggedIn(false)
+        setProfileTrigger(false)
     }
 
     return (
@@ -60,6 +71,10 @@ function Navbar() {
                         {navLogin(loggedIn)}
                     </ul>
                 </div>
+            </div>
+            <div className={display(profileTrigger)}>
+                    <p className='active-user'>Logged in as: <br/> {user.username}</p>
+                    <span className='logout-button' onClick={logout}>Log out</span>
             </div>
         </nav>
     );

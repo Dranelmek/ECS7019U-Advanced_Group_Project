@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import Login from './Login';
 import Home from './Home';
 import Potholes from './Potholes';
+import AddPothole from './AddPothole';
 import Register from './Register';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { useState, useContext, createContext, useEffect } from 'react';
@@ -46,6 +47,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/potholes" element={<Potholes />} />
+              <Route path="/add_pothole" element={<AddPothole />} />
             </Routes>
           </LoginContext.Provider>
           </UserContext.Provider>

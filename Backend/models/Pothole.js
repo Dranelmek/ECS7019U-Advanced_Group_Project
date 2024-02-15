@@ -4,19 +4,19 @@ const PotholeSchema = new mongoose.Schema(
   {
     location: {
       type: String,
-      require: true
+      // require: true
     },
     video:{
-      type: String,
+      type: String
     },
     image:{
-      type: String,
+      type: String
     },
     severe_level:{
-      type: String,
+      type: String
     },
     repairment_needed:{
-      type: Boolean,
+      type: Boolean
     },
   },
   { timestamps: true }

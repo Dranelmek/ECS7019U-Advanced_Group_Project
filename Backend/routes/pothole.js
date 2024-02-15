@@ -31,6 +31,7 @@ router.post("/addNewPothole", async (req, res) => {
     res.status(200).json(newPotholeDetail);
 
   } catch (err) {
+    console.log(err);
     res.status(500).json({ 
       error: "Internal Server Error", 
       message: err.message 

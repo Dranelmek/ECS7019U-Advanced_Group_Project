@@ -90,8 +90,10 @@ function Potholes() {
 
     return(
         <header className='List-header'>
+            <div className='List-container'>
             {holes}
             {changeListSize(CFA)}
+            </div>
         </header>
     );
 }

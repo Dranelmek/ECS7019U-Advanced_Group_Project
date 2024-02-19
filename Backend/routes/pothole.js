@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//create a new pothole
+// Create a new pothole
 router.post("/addNewPothole", async (req, res) => {
   try {
     //create new pothole
@@ -39,7 +39,7 @@ router.post("/addNewPothole", async (req, res) => {
   }
 });
 
-//get a pothole by id
+// Get a pothole by id
 router.get("/:id", async (req, res) => {
   try {
     const pothole = await Pothole.findById(req.params.id);

@@ -15,8 +15,8 @@ dotenv.config();
 
 
 mongoose.connect(
-  // `mongodb://localhost:27017/groupProject`, // Use this for running the testing code
-  `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`,
+  // `mongodb://localhost:27017/groupProject`, // Use this for running the testing code or local database
+  `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`, // Cloud database
   { 
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
@@ -48,8 +48,8 @@ app.use((req, res, next) => {
 });
 
 const storage = new GridFsStorage({
-  // url: `mongodb://localhost:27017/groupProject`, // Use this for running the testing code
-  url: `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`,
+  // url: `mongodb://localhost:27017/groupProject`, // Use this for running the testing code or local database
+  url: `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`, // Cloud database
   options: { useNewUrlParser: true, useUnifiedTopology: true }, // MongoDB connection options
   // Define how files will be stored
   file: (req, file) => {
@@ -76,7 +76,7 @@ const upload = multer({
     }
   },
 }).fields([
-  { name: "files", maxCount: 1 }, // Define the field name for uploaded files and maximum file count
+  { name: "image", maxCount: 1 }, // Define the field name for uploaded files and maximum file count
   { name: "video", maxCount: 1 }, // Define the field name for uploaded videos and maximum file count
 ]);
 
@@ -161,4 +161,3 @@ const server = app.listen(8800, () => {
 
 // Export the server instance for external usage 
 module.exports = server;
-

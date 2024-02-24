@@ -1,16 +1,30 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { APILINK } from './App';
+import { LoginContext } from './App';
 import './styles/Register.css';
 
 
 function AddPothole() {
+    
+    const navigate = useNavigate()
+    const [loggedIn, setLoggedIn] = useContext(LoginContext)
     const [location, setLocation] = useState("");
     const [repairmentNeeded, setRepairmentNeeded] = useState(false);
     const [video, setVideo] = useState(null);
     const [severe_level, setSevereLevel] = useState("");
     const [image, setImage] = useState(null);
 
+    // useEffect(() => {
+    //     if (!loggedIn) {
+    //         navigate("/")
+    //     }
+    //     console.log(loggedIn)
+        
+    // }, []);
+
     async function handleUpload() {
+        
         // Create FormData object
         const formData = new FormData();
         const imageFileName = Date.now() + image.name;

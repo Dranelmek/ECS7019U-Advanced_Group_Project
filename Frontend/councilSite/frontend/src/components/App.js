@@ -5,6 +5,7 @@ import Home from './Home';
 import Potholes from './Potholes';
 import AddPothole from './AddPothole';
 import Register from './Register';
+import PotholeMap from './PotholeMap';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { useState, useContext, createContext, useEffect } from 'react';
 import { CookiesProvider, useCookies } from "react-cookie";
@@ -47,6 +48,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/potholes" element={<Potholes />} />
+              <Route path="/map" element={<PotholeMap />}/>
               <Route path="/add_pothole" element={<AddPothole />} />
             </Routes>
           </LoginContext.Provider>

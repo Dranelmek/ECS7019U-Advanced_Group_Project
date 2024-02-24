@@ -136,6 +136,7 @@ def main(video_path):
                 create_video_from_frames(captured_frames, f"output2\captured_frames_{frame_count}.mp4", frame_rate)
 
                 results.append({
+                    "frame": frame_count,
                     "class": 1,
                     "GPS": (gps_n, gps_e),
                     "img": image_base64,

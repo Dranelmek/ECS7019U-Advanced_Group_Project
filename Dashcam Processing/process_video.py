@@ -126,9 +126,9 @@ def main(video_path):
 
     # Check if the resolution is 1920x1080 (1080p)
     if width == 1920 and height == 1080:
-        window_dim = (slice(850, 1000), slice(None, 600))
+        window_dim = (slice(940, 975), slice(35, 500))
     else:
-        window_dim = (slice(1900, 2100), slice(None, 1000))
+        window_dim = (slice(2020, 2100), slice(50, 1000))
 
     # PARAMS
     pretrained_weights_path = 'fine_tuned_resnet_50'  # path to model

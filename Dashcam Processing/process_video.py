@@ -13,17 +13,54 @@ import re
 import os
 import json
 import io
+import requests
 
 
-def get_gps(frame):
+def upload_pothole(location, repairment_needed, severe_level, image_path, video_path, upload_files_url):
+    try:
+        # Create FormData object
+        formData = {
+            'image': ('image2.jpg', open(image_path, 'rb'), 'image/jpeg'),  # Change to a unique file name
+            'video': ('video2.mp4', open(video_path, 'rb'), 'video/mp4')
+        }
+
+        # Make a POST request to upload the files
+        file_response = requests.post(upload_files_url, files=formData)
+
+        # Check the response
+        if file_response.status_code == 200:
+            print("Pothole created successfully")
+
+            data = {
+                'location': location,
+                'image': image_file_name,
+                'video': video_file_name,
+                'repairment_needed': repairment_needed,
+                'severe_level': severe_level
+            }
+
+            new_pothole_response = requests.post(new_pothole_url, json=data)
+
+            if new_pothole_response.status_code == 200:
+                print('Successfully uploaded new pothole')
+            else:
+                print("Error uploading pothole")
+        else:
+            print("Failed to create pothole. Status code:", file_response.status_code)
+
+    except Exception as e:
+        print("Error uploading files or creating pothole:", e)
+
+
+def get_gps(frame, window_dim):
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    window = frame[875:975, 35:600]
+    window = frame[window_dim]
     _, window = cv2.threshold(window, 200, 255, cv2.THRESH_BINARY)
 
     text = pytesseract.image_to_string(window)
 
     last_line = text.splitlines()[-1]
-    numeric_values = re.findall(r'[-+]?\d*\.\d+|\d+', last_line)
+    numeric_values = re.findall(r'\d+', last_line)
 
     gps_n = float(".".join(numeric_values[0:2]))
     gps_e = float(".".join(numeric_values[2:4]))
@@ -35,7 +72,7 @@ def get_gps(frame):
     return gps_n, gps_e, speed
 
 
-def get_prediction(frame, resnet):
+def get_prediction_resnet(frame, resnet):
     # IMAGE PREPROCESS
     preprocess = transforms.Compose([
         transforms.Resize(256),
@@ -84,6 +121,15 @@ def main(video_path):
     frame_count = 0
     results = []
 
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    # Check if the resolution is 1920x1080 (1080p)
+    if width == 1920 and height == 1080:
+        window_dim = (slice(850, 1000), slice(None, 600))
+    else:
+        window_dim = (slice(1900, 2100), slice(None, 1000))
+
     # PARAMS
     pretrained_weights_path = 'fine_tuned_resnet_50'  # path to model
 
@@ -114,11 +160,11 @@ def main(video_path):
 
         if frame_count % (frame_rate / processing_rate) == 0:
             # Get the GPS data and speed
-            gps_n, gps_e, speed = get_gps(frame)
-            predicted_class = get_prediction(frame, resnet)
+            gps_n, gps_e, speed = get_gps(frame, window_dim)
+            predicted_class = get_prediction_resnet(frame, resnet)
 
             if predicted_class == 1:
-                print("AAAAAAASFHNSBAAAAAAAAAAAAAAAAFLKABBFOJLSABOAAAAAAAAAAAAHLFBAOBSPBDOJASPDBN")
+                print("Detected Pothole")
                 image_base64 = encode_frame_to_base64(frame)
 
                 frames_to_capture = int(frame_rate)  # number of frames in one second

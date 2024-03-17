@@ -1,31 +1,25 @@
-import base64
 import torch
-import torchvision.models as models
-import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
-from PIL import Image
-from torch.utils.data import DataLoader, TensorDataset
 import argparse
 import pytesseract  # uses https://github.com/UB-Mannheim/tesseract/wiki
 import cv2
-import matplotlib.pyplot as plt
 import re
 import os
-import json
-import io
+from ultralytics import YOLO
 import requests
+import datetime
+import time
 
 
-def upload_pothole(location, repairment_needed, severe_level, image_path, video_path, upload_files_url):
+def upload_pothole(location, repairment_needed, severe_level, image_file_name, video_file_name, image_path, video_path):
     try:
         # Create FormData object
         formData = {
-            'image': ('image2.jpg', open(image_path, 'rb'), 'image/jpeg'),  # Change to a unique file name
-            'video': ('video2.mp4', open(video_path, 'rb'), 'video/mp4')
+            'image': (image_file_name, open(image_path, 'rb'), 'image/jpeg'),  # Change to a unique file name
+            'video': (video_file_name, open(video_path, 'rb'), 'video/mp4')
         }
 
         # Make a POST request to upload the files
-        file_response = requests.post(upload_files_url, files=formData)
+        file_response = requests.post("http://localhost:8800/api/upload", files=formData)
 
         # Check the response
         if file_response.status_code == 200:
@@ -39,7 +33,7 @@ def upload_pothole(location, repairment_needed, severe_level, image_path, video_
                 'severe_level': severe_level
             }
 
-            new_pothole_response = requests.post(new_pothole_url, json=data)
+            new_pothole_response = requests.post("http://localhost:8800/pothole/addNewPothole", json=data)
 
             if new_pothole_response.status_code == 200:
                 print('Successfully uploaded new pothole')
@@ -72,35 +66,6 @@ def get_gps(frame, window_dim):
     return gps_n, gps_e, speed
 
 
-def get_prediction_resnet(frame, resnet):
-    # IMAGE PREPROCESS
-    preprocess = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-    img = Image.fromarray(frame)
-    input_tensor = preprocess(img)
-    input_batch = input_tensor.unsqueeze(0)
-    # print("Input tensor shape:", input_batch.shape)
-
-    # RUNNING
-    with torch.no_grad():
-        output = resnet(input_batch)
-        predicted_index = torch.argmax(output, dim=1)
-
-    # 1 pothole 0 not pothole
-    predicted_class = predicted_index.item()
-    return predicted_class
-
-
-def encode_frame_to_base64(frame):
-    ret, buffer = cv2.imencode('.jpg', frame)
-    frame_base64 = base64.b64encode(buffer).decode('utf-8')
-    return frame_base64
-
-
 def create_video_from_frames(frames, output_path, fps):
     frame_height, frame_width, _ = frames[0].shape
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -112,14 +77,30 @@ def create_video_from_frames(frames, output_path, fps):
     out.release()
 
 
-def main(video_path):
+def delete_files_in_folder(folder_path):
+    try:
+        # List all files in the folder
+        files = os.listdir(folder_path)
+
+        # Iterate over each file and delete it
+        for file_name in files:
+            file_path = os.path.join(folder_path, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted file: {file_path}")
+
+        print("All files deleted successfully.")
+    except Exception as e:
+        print("Error deleting files:", e)
+
+
+def main(video_path, upload):
     # VIDEO PROCESSING
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     frame_rate = cap.get(cv2.CAP_PROP_FPS)
     processing_rate = 1
     frame_count = 0
-    results = []
 
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -130,42 +111,41 @@ def main(video_path):
     else:
         window_dim = (slice(2020, 2100), slice(50, 1000))
 
-    # PARAMS
-    pretrained_weights_path = 'fine_tuned_resnet_50'  # path to model
-
     # GPU
     if torch.cuda.is_available():
         device = torch.device("cuda")
-        # print('Using GPU:', torch.cuda.get_device_name())
     else:
         device = torch.device("cpu")
-        # print('Using CPU')
 
-    # MODEL INIT
-    resnet = models.resnet50()
-    num_ftrs = resnet.fc.in_features
-    resnet.fc = torch.nn.Linear(num_ftrs, 2)
-    resnet.load_state_dict(torch.load(pretrained_weights_path))
-    resnet.eval()
+    # Model
+    pt_file = "Yolo Model.pt"  # path to YOLO
+    model = YOLO(pt_file)
+    model.to(device)
+    min_confidence = 0.3
 
     while cap.isOpened():
         ret, frame = cap.read()
         predicted_class = 0
-        gps_n = 0
-        gps_e = 0
+        lat = 0
+        long = 0
         speed = 0
 
         if not ret:
             break
 
         if frame_count % (frame_rate / processing_rate) == 0:
+            print("checking this frame")
             # Get the GPS data and speed
-            gps_n, gps_e, speed = get_gps(frame, window_dim)
-            predicted_class = get_prediction_resnet(frame, resnet)
+            lat, long, speed = get_gps(frame, window_dim)
+            yolo_result = model(source=frame, conf=min_confidence, show=False)  # run on YOLO
 
-            if predicted_class == 1:
+            # If pothole detected
+            if yolo_result[0].boxes.data.numel() != 0:  # if the output sums to something other than 0 pothole detected
                 print("Detected Pothole")
-                image_base64 = encode_frame_to_base64(frame)
+
+                time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+                yolo_result[0].save(fr"output_img\{time}{frame_count}.jpg")
 
                 frames_to_capture = int(frame_rate)  # number of frames in one second
                 start_frame = max(0, frame_count - frames_to_capture)
@@ -179,14 +159,32 @@ def main(video_path):
                     if ret:
                         captured_frames.append(captured_frame)
 
-                create_video_from_frames(captured_frames, f"output2\captured_frames_{frame_count}.mp4", frame_rate)
+                create_video_from_frames(captured_frames, fr"output_vid\{time}{frame_count}.mp4", frame_rate)
 
-                results.append({
-                    "frame": frame_count,
-                    "class": 1,
-                    "GPS": (gps_n, gps_e),
-                    "img": image_base64,
-                })
+                if upload:
+                    location = f"{lat}; {long}"
+                    image_file_name = f"{time}{frame_count}.jpg"
+                    video_file_name = f"{time}{frame_count}.mp4"
+                    image_path = fr"output_vid\{time}{frame_count}.mp4"
+                    video_path = fr"output_img\{time}{frame_count}.jpg"
+
+                    print(location)
+                    print(image_file_name)
+                    print(video_file_name)
+                    print(image_path)
+                    print(video_path)
+
+                    upload_pothole(location=location, repairment_needed=True, severe_level=3,
+                                   image_file_name=image_file_name, video_file_name=video_file_name,
+                                   image_path=image_path, video_path=video_path)
+
+                    print("uploaded")
+
+                    # delete_file(image_path)
+                    # delete_file(video_path)
+
+                else:
+                    print("No pothole detected")
 
             # code to control number of frames captured per second depending on speed
             if speed > 90:
@@ -198,27 +196,23 @@ def main(video_path):
         print(frame_count)
         frame_count += 1
     cap.release()
-    return results
 
 
 if __name__ == "__main__":
-    output_directory = "output2"
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
+    output_directory_vid = "output_vid"
+    output_directory_img = "output_img"
+    if not os.path.exists(output_directory_vid):
+        os.makedirs(output_directory_vid)
+    if not os.path.exists(output_directory_img):
+        os.makedirs(output_directory_img)
 
     # USE ARGS
-    # parser = argparse.ArgumentParser(description='Process video for ResNet classification')
+    # parser = argparse.ArgumentParser(description='Process video')
     # parser.add_argument('video_path', metavar='video_path', type=str, help='Path to the video file')
     # args = parser.parse_args()
-    # result = main(args.video_path)
+    # result = main(args.video_path, upload=True)
 
     # USE SPECIFIC PATH
-    result = main("20240204_202733F.ts")
-
-    # OUTPUT
-    output_file = r"output2\result.json"
-    # Write the result to a JSON file
-    with open(output_file, "w") as f:
-        json.dump(result, f)
-
-    print("Result saved to", output_file)
+    main("testVideo.ts", upload=False)
+    delete_files_in_folder(output_directory_vid)
+    delete_files_in_folder(output_directory_img)

@@ -90,6 +90,7 @@ app.post("/api/upload", (req, res) => {
 
     } else if (err) {
       // If there's any other error, return a 404 error response
+      console.log(err);
       return res.status(404).json({ message: err.message });
     }
     // If upload is successful, access the uploaded files information from req.files

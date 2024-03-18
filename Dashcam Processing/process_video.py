@@ -68,7 +68,7 @@ def get_gps(frame, window_dim):
 
 def create_video_from_frames(frames, output_path, fps):
     frame_height, frame_width, _ = frames[0].shape
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
     for frame in frames:
@@ -183,8 +183,8 @@ def main(video_path, upload):
                     # delete_file(image_path)
                     # delete_file(video_path)
 
-                else:
-                    print("No pothole detected")
+            else:
+                print("No pothole detected")
 
             # code to control number of frames captured per second depending on speed
             if speed > 90:

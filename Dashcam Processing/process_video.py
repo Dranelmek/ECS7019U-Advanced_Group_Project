@@ -66,6 +66,20 @@ def upload_pothole(location, repairment_needed, severe_level, image_file_name, v
         print("Error uploading files or creating pothole:", e)
 
 
+def is_not_dark(frame):
+    # Convert frame to grayscale
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # Calculate average pixel intensity
+    average_intensity = cv2.mean(gray_frame)[0]
+    # Define a threshold to distinguish between day and night images
+    threshold = 60
+
+    if average_intensity < threshold:
+        return False
+    else:
+        return True
+
+
 def get_gps(frame, window_dim):
     failed = False
     gps_n = 0
@@ -137,6 +151,8 @@ def main(video_path, upload, to_video):
     # Testing
     failed_count = 0
     frames_checked = 0
+    dark_count = 0
+
 
     # VIDEO PROCESSING
     cap = cv2.VideoCapture(video_path)
@@ -177,6 +193,7 @@ def main(video_path, upload, to_video):
         lat = 0
         long = 0
         speed = 0
+        failed = False
 
         if not ret:
             break
@@ -184,21 +201,26 @@ def main(video_path, upload, to_video):
         if frame_count % (frame_rate / processing_rate) == 0:
             print("checking this frame")
             frames_checked += 1
-            # Get the GPS data and speed
-            lat, long, speed, failed = get_gps(frame, window_ocr_dim)
-            yolo_result = model(source=frame[window_detect_dim], conf=min_confidence, show=False)  # run on YOLO
+            if is_not_dark(frame):
+                # Get the GPS data and speed
+                lat, long, speed, failed = get_gps(frame, window_ocr_dim)
+                yolo_result = model(source=frame[window_detect_dim], conf=min_confidence, show=False)  # run on YOLO
 
-            # If pothole detected (if the output sums to something other than 0 pothole detected) and not failed
-            if (yolo_result[0].boxes.data.numel() != 0) and (not failed):
-                timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-                location = f"{lat}; {long}"
-                print("Detected Pothole")
+                # If pothole detected (if the output sums to something other than 0 pothole detected) and not failed
+                if (yolo_result[0].boxes.data.numel() != 0) and (not failed):
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                    location = f"{lat}; {long}"
+                    print("Detected Pothole")
 
-                frames_queue.append([frame, fr"{timestamp}{frame_count}", location])
-                yolo_result[0].save(fr"output_img\{timestamp}{frame_count}.jpg")
+                    frames_queue.append([frame, fr"{timestamp}{frame_count}", location])
+                    yolo_result[0].save(fr"output_img\{timestamp}{frame_count}.jpg")
 
+                else:
+                    print("No pothole detected")
+                    frames_queue.append([frame, "", ""])
             else:
-                print("No pothole detected")
+                print("too dark for model")
+                dark_count += 1
                 frames_queue.append([frame, "", ""])
 
             # code to control number of frames captured per second depending on speed
@@ -229,6 +251,7 @@ def main(video_path, upload, to_video):
 
     print("failed count:", failed_count)
     print("frames checked:", frames_checked)
+    print("dark_count:", dark_count)
 
     return failed_count, frames_checked
 
@@ -264,6 +287,7 @@ if __name__ == "__main__":
     #     failed_count_total += failed_count
     #     frames_checked_total += frames_checked
 
+    print()
     print("failed count:", failed_count_total)
     print("frames checked:", frames_checked_total)
     # delete_files_in_folder(output_directory_vid)

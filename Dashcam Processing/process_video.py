@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import argparse
 import pytesseract  # uses https://github.com/UB-Mannheim/tesseract/wiki
@@ -8,6 +9,25 @@ from ultralytics import YOLO
 import requests
 import datetime
 import time
+from collections import deque
+import sys
+
+
+def delete_files_in_folder(folder_path):
+    try:
+        # List all files in the folder
+        files = os.listdir(folder_path)
+
+        # Iterate over each file and delete it
+        for file_name in files:
+            file_path = os.path.join(folder_path, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted file: {file_path}")
+
+        print("All files deleted successfully.")
+    except Exception as e:
+        print("Error deleting files:", e)
 
 
 def upload_pothole(location, repairment_needed, severe_level, image_file_name, video_file_name, image_path, video_path):
@@ -47,69 +67,98 @@ def upload_pothole(location, repairment_needed, severe_level, image_file_name, v
 
 
 def get_gps(frame, window_dim):
+    failed = False
+    gps_n = 0
+    gps_e = 0
+    speed = 0
+
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     window = frame[window_dim]
     _, window = cv2.threshold(window, 200, 255, cv2.THRESH_BINARY)
 
     text = pytesseract.image_to_string(window)
+    try:
+        last_line = text.splitlines()[-1]
+        numeric_values = re.findall(r'\d+', last_line)
 
-    last_line = text.splitlines()[-1]
-    numeric_values = re.findall(r'\d+', last_line)
-
-    gps_n = float(".".join(numeric_values[0:2]))
-    gps_e = float(".".join(numeric_values[2:4]))
-    speed = int(numeric_values[-1])
-    if len(numeric_values) != 5:
-        speed = 0
+        gps_n = float(".".join(numeric_values[0:2]))
+        gps_e = float(".".join(numeric_values[2:4]))
+        speed = int(numeric_values[-1])
+        if len(numeric_values) != 5:
+            speed = 0
+    except:
+        failed = True
+        print("failed")
 
     # return GPS N, GPS E, Speed
-    return gps_n, gps_e, speed
+    return gps_n, gps_e, speed, failed
 
 
-def create_video_from_frames(frames, output_path, fps):
-    frame_height, frame_width, _ = frames[0].shape
+def create_video_from_frames(frames_queue, output_path, fps, frame_height, frame_width):
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
-    for frame in frames:
-        out.write(frame)
+    for frame_info in frames_queue:
+        out.write(frame_info[0])
 
     out.release()
 
 
-def delete_files_in_folder(folder_path):
-    try:
-        # List all files in the folder
-        files = os.listdir(folder_path)
+def to_video_and_upload(frames_queue, frame_rate, height, width, upload):
+    target = frames_queue[frame_rate]
+    target_name = target[1]
+    target_location = target[2]
+    vid_path = r"output_vid\\"
+    img_path = r"output_img\\"
+    if target_name:  # if there is a name for the frame it is a frame with a detected pothole
+        create_video_from_frames(frames_queue, (vid_path + target_name + ".mp4"), frame_rate, height, width)
+        cv2.imwrite(("img" + vid_path + target_name + ".jpg"), target[0])
 
-        # Iterate over each file and delete it
-        for file_name in files:
-            file_path = os.path.join(folder_path, file_name)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-                print(f"Deleted file: {file_path}")
+        if upload:
+            image_file_name = target_name + ".jpg"
+            video_file_name = target_name + ".mp4"
+            image_path = vid_path + target_name + ".mp4"
+            video_path = img_path + target_name + ".jpg"
 
-        print("All files deleted successfully.")
-    except Exception as e:
-        print("Error deleting files:", e)
+            print(target_location)
+            print(image_file_name)
+            print(video_file_name)
+            print(image_path)
+            print(video_path)
+
+            upload_pothole(location=target_location, repairment_needed=True, severe_level=3,
+                           image_file_name=image_file_name, video_file_name=video_file_name,
+                           image_path=image_path, video_path=video_path)
+
+            print("uploaded a frame")
 
 
-def main(video_path, upload):
+def main(video_path, upload, to_video):
+    # Testing
+    failed_count = 0
+    frames_checked = 0
+
     # VIDEO PROCESSING
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frame_rate = cap.get(cv2.CAP_PROP_FPS)
+    frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
     processing_rate = 1
     frame_count = 0
-
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    num_saved_frames = int(frame_rate * 2) + 1
+    frames_queue = deque(maxlen=num_saved_frames)
+
+    for i in range(num_saved_frames):
+        frames_queue.append([np.zeros((height, width, 3), dtype=np.uint8), "", ""])
 
     # Check if the resolution is 1920x1080 (1080p)
     if width == 1920 and height == 1080:
-        window_dim = (slice(940, 975), slice(35, 500))
+        window_ocr_dim = (slice(940, 975), slice(35, 500))
+        window_detect_dim = (slice(620, 780), slice(576, 1344))
     else:
-        window_dim = (slice(2020, 2100), slice(50, 1000))
+        window_ocr_dim = (slice(2020, 2100), slice(50, 1000))
+        window_detect_dim = (slice(1296, 1728), slice(1152, 2688))
 
     # GPU
     if torch.cuda.is_available():
@@ -121,11 +170,10 @@ def main(video_path, upload):
     pt_file = "Yolo Model.pt"  # path to YOLO
     model = YOLO(pt_file)
     model.to(device)
-    min_confidence = 0.3
+    min_confidence = 0.55
 
     while cap.isOpened():
         ret, frame = cap.read()
-        predicted_class = 0
         lat = 0
         long = 0
         speed = 0
@@ -135,70 +183,58 @@ def main(video_path, upload):
 
         if frame_count % (frame_rate / processing_rate) == 0:
             print("checking this frame")
+            frames_checked += 1
             # Get the GPS data and speed
-            lat, long, speed = get_gps(frame, window_dim)
-            yolo_result = model(source=frame, conf=min_confidence, show=False)  # run on YOLO
+            lat, long, speed, failed = get_gps(frame, window_ocr_dim)
+            yolo_result = model(source=frame[window_detect_dim], conf=min_confidence, show=False)  # run on YOLO
 
-            # If pothole detected
-            if yolo_result[0].boxes.data.numel() != 0:  # if the output sums to something other than 0 pothole detected
+            # If pothole detected (if the output sums to something other than 0 pothole detected) and not failed
+            if (yolo_result[0].boxes.data.numel() != 0) and (not failed):
+                timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                location = f"{lat}; {long}"
                 print("Detected Pothole")
 
-                time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-
-                yolo_result[0].save(fr"output_img\{time}{frame_count}.jpg")
-
-                frames_to_capture = int(frame_rate)  # number of frames in one second
-                start_frame = max(0, frame_count - frames_to_capture)
-                end_frame = min(total_frames, frame_count + frames_to_capture)
-
-                captured_frames = []
-
-                for i in range(start_frame, end_frame):
-                    cap.set(cv2.CAP_PROP_POS_FRAMES, i)
-                    ret, captured_frame = cap.read()
-                    if ret:
-                        captured_frames.append(captured_frame)
-
-                create_video_from_frames(captured_frames, fr"output_vid\{time}{frame_count}.mp4", frame_rate)
-
-                if upload:
-                    location = f"{lat}; {long}"
-                    image_file_name = f"{time}{frame_count}.jpg"
-                    video_file_name = f"{time}{frame_count}.mp4"
-                    image_path = fr"output_vid\{time}{frame_count}.mp4"
-                    video_path = fr"output_img\{time}{frame_count}.jpg"
-
-                    print(location)
-                    print(image_file_name)
-                    print(video_file_name)
-                    print(image_path)
-                    print(video_path)
-
-                    upload_pothole(location=location, repairment_needed=True, severe_level=3,
-                                   image_file_name=image_file_name, video_file_name=video_file_name,
-                                   image_path=image_path, video_path=video_path)
-
-                    print("uploaded")
-
-                    # delete_file(image_path)
-                    # delete_file(video_path)
+                frames_queue.append([frame, fr"{timestamp}{frame_count}", location])
+                yolo_result[0].save(fr"output_img\{timestamp}{frame_count}.jpg")
 
             else:
                 print("No pothole detected")
+                frames_queue.append([frame, "", ""])
 
             # code to control number of frames captured per second depending on speed
             if speed > 90:
-                processing_rate = 3  # Process 3 frames per second
+                processing_rate = 6  # Process 6 frames per second
             elif speed > 60:
-                processing_rate = 2  # Process 2 frames per second
+                processing_rate = 4  # Process 4 frames per second
             else:
-                processing_rate = 1  # Process 1 frame per second
+                processing_rate = 2  # Process 2 frame per second
+
+            if failed:
+                failed_count += 1
+                processing_rate = frame_rate / 2
+        else:
+            frames_queue.append([frame, "", ""])
+
+        if to_video:
+            to_video_and_upload(frames_queue, frame_rate, height, width, upload)
+
         print(frame_count)
         frame_count += 1
+
     cap.release()
+
+    for i in range(num_saved_frames):
+        frames_queue.append([np.zeros((height, width, 3), dtype=np.uint8), "", ""])
+        to_video_and_upload(frames_queue, frame_rate, height, width, upload)
+
+    print("failed count:", failed_count)
+    print("frames checked:", frames_checked)
+
+    return failed_count, frames_checked
 
 
 if __name__ == "__main__":
+
     output_directory_vid = "output_vid"
     output_directory_img = "output_img"
     if not os.path.exists(output_directory_vid):
@@ -206,13 +242,29 @@ if __name__ == "__main__":
     if not os.path.exists(output_directory_img):
         os.makedirs(output_directory_img)
 
+    failed_count_total = 0
+    frames_checked_total = 0
+
     # USE ARGS
     # parser = argparse.ArgumentParser(description='Process video')
     # parser.add_argument('video_path', metavar='video_path', type=str, help='Path to the video file')
     # args = parser.parse_args()
-    # result = main(args.video_path, upload=True)
+    # result = main(args.video_path, upload=False, to_video=True)
 
     # USE SPECIFIC PATH
-    main("testVideo.ts", upload=False)
-    delete_files_in_folder(output_directory_vid)
-    delete_files_in_folder(output_directory_img)
+    failed_count, frames_checked = main("testVideo.ts", upload=False, to_video=True)
+    failed_count_total += failed_count
+    frames_checked_total += frames_checked
+
+    # files = os.listdir("dashcam_videos")
+    # for file_name in files:
+    #     video_path = os.path.join("dashcam_videos", file_name)
+    #     print(video_path)
+    #     failed_count, frames_checked = main(video_path=video_path, upload=False, to_video=False)
+    #     failed_count_total += failed_count
+    #     frames_checked_total += frames_checked
+
+    print("failed count:", failed_count_total)
+    print("frames checked:", frames_checked_total)
+    # delete_files_in_folder(output_directory_vid)
+    # delete_files_in_folder(output_directory_img)

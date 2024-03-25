@@ -34,6 +34,7 @@ function Login() {
         try {
             const fetchResponse = await fetch(loc, settings);
             const data = await fetchResponse.json();
+            console.log(data.isAdmin);
             if (data.username) {
                 window.alert(`Successfully logged in!`);
                 login(data)

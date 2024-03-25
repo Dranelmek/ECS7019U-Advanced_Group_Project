@@ -51,10 +51,12 @@ function ListEntry(props) {
                         </div>
                     </div>
                 </div>
-                {deleteButton(loggedIn)}
-                <span className='expand-button' onClick={() => setIsExpanded(!isExpanded)}>
-                    <img src={minIcon} alt="expand" className='expand-icon'/>
-                </span>
+                <div className='util-buttons'>
+                    <span className='expand-button' onClick={() => setIsExpanded(!isExpanded)}>
+                        <img src={minIcon} alt="expand" className='expand-icon'/>
+                    </span>
+                    {deleteButton(loggedIn)}
+                </div>
             </div>
         );
     } else {

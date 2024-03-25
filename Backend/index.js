@@ -15,8 +15,8 @@ dotenv.config();
 
 
 mongoose.connect(
-  // `mongodb://localhost:27017/groupProject`, // Use this for running the testing code or local database
-  `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`, // Cloud database
+  `mongodb://localhost:27017/groupProject`, // Use this for running the testing code or local database
+  // `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`, // Cloud database
   { 
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
@@ -48,8 +48,8 @@ app.use((req, res, next) => {
 });
 
 const storage = new GridFsStorage({
-  // url: `mongodb://localhost:27017/groupProject`, // Use this for running the testing code or local database
-  url: `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`, // Cloud database
+  url: `mongodb://localhost:27017/groupProject`, // Use this for running the testing code or local database
+  // url: `mongodb+srv://group2:group2@cluster0.es1jknu.mongodb.net/`, // Cloud database
   options: { useNewUrlParser: true, useUnifiedTopology: true }, // MongoDB connection options
   // Define how files will be stored
   file: (req, file) => {

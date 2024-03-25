@@ -153,11 +153,10 @@ def main(video_path, upload, to_video):
     frames_checked = 0
     dark_count = 0
 
-
     # VIDEO PROCESSING
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
+    frame_rate = round(cap.get(cv2.CAP_PROP_FPS))
     processing_rate = 1
     frame_count = 0
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -198,7 +197,7 @@ def main(video_path, upload, to_video):
         if not ret:
             break
 
-        if frame_count % (frame_rate / processing_rate) == 0:
+        if frame_count % int(frame_rate / processing_rate) == 0:
             print("checking this frame")
             frames_checked += 1
             if is_not_dark(frame):
@@ -253,7 +252,7 @@ def main(video_path, upload, to_video):
     print("frames checked:", frames_checked)
     print("dark_count:", dark_count)
 
-    return failed_count, frames_checked
+    return failed_count, frames_checked, dark_count
 
 
 if __name__ == "__main__":
@@ -267,6 +266,7 @@ if __name__ == "__main__":
 
     failed_count_total = 0
     frames_checked_total = 0
+    dark_count_total = 0
 
     # USE ARGS
     # parser = argparse.ArgumentParser(description='Process video')
@@ -275,17 +275,19 @@ if __name__ == "__main__":
     # result = main(args.video_path, upload=False, to_video=True)
 
     # USE SPECIFIC PATH
-    failed_count, frames_checked = main("testVideo.ts", upload=False, to_video=True)
+    failed_count, frames_checked, dark_count = main("testVideo.ts", upload=False, to_video=True)
     failed_count_total += failed_count
     frames_checked_total += frames_checked
+    dark_count_total += dark_count
 
     # files = os.listdir("dashcam_videos")
     # for file_name in files:
     #     video_path = os.path.join("dashcam_videos", file_name)
     #     print(video_path)
-    #     failed_count, frames_checked = main(video_path=video_path, upload=False, to_video=False)
+    #     failed_count, frames_checked, dark_count = main(video_path=video_path, upload=False, to_video=False)
     #     failed_count_total += failed_count
     #     frames_checked_total += frames_checked
+    #     dark_count_total += dark_count
 
     print()
     print("failed count:", failed_count_total)

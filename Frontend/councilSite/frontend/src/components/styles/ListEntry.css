@@ -11,7 +11,7 @@
 }
 
 .pothole-location {
-    font-size: calc(10px + 2vmin);
+    font-size: calc(17px + 1vmin);
 }
 
 .pothole-image {
@@ -56,6 +56,11 @@
     position: relative;
 }
 
+.util-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
 .expand-button {
     width: 25px;
     height: 25px;
@@ -71,11 +76,11 @@
 }
 
 .expanded .expand-button {
-    left: 7%;
+    left: 85px;
 }
 
 .compact .expand-button {
-    left: 40%;
+    left: 270px;
 }
 
 .expand-button:hover {
@@ -92,8 +97,8 @@
     position: relative;
     color: whitesmoke;
     background-color: rgb(139, 125, 106);
-    left: 10%;
-    margin-top: 27vh;
+    margin-left: 40px;
+    margin-top: 160px;
     width: 50px;
     height: 16px;
     padding: 8px;

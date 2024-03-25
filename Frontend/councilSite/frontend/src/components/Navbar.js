@@ -60,7 +60,7 @@ function Navbar() {
                             <NavLink to="/">Home</NavLink>
                         </li>
                         <li>
-                            Map
+                            <NavLink to="/map">Map</NavLink>
                         </li>
                         <li>
                             <NavLink to="/potholes">Potholes</NavLink>

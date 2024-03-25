@@ -2,12 +2,42 @@ import './styles/Potholes.css'
 import ListEntry from './ListEntry';
 import { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import potholeList from './assets/potholeList.json'
+import { APILINK } from './App';
 
 function Potholes() {
     
+    const [CFA, setCFA] = useState(0)
+    const [potholeList, setPotholeList] = useState([0])
+
+    useEffect(() => {
+        const  fetchPotholes = async () => {
+            const response = await fetch(
+                `${APILINK}pothole`,
+                {
+                    method: 'GET'
+                }
+            )
+            const data = await response.json()
+            setPotholeList(data)
+        }
+        fetchPotholes()
+    }, [])
+
+    
+    useEffect(() => {
+        if (potholeList.length > 5) {
+            setCFA(5)
+        } 
+    }, [potholeList])
+
     function changeListSize(size) {
-        if (size <= 5) {
+        if (potholeList.length < size) {
+            return (
+                <div hidden>
+                </div>
+            );
+            
+        } else if (size <= 5) {
             return (
                 <div className='show-more alone'>
                     <Link onClick={showMore}>Show more</Link>
@@ -52,15 +82,7 @@ function Potholes() {
     }
 
 
-    const [CFA, setCFA] = useState(0)
     
-    useEffect(() => {
-        if (potholeList.length > 5) {
-            setCFA(5)
-        } else {
-            setCFA(potholeList.length)
-        }
-    }, [])
 
     let holes = [...Array(CFA)].map((value, index) => (
         <ListEntry id={index} pothole={potholeList[index]}/>
@@ -68,8 +90,10 @@ function Potholes() {
 
     return(
         <header className='List-header'>
+            <div className='List-container'>
             {holes}
             {changeListSize(CFA)}
+            </div>
         </header>
     );
 }

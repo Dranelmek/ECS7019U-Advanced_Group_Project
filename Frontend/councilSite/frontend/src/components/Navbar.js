@@ -1,36 +1,52 @@
 import './styles/Navbar.css';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import logo from './assets/logo.jpg';
 import { useContext, useState } from 'react';
-import { LoginContext } from './App';
-
-function navLogin(check) {
-    if (check) {
-        return (
-            <li>
-                Profile
-            </li>
-        );
-    } else {
-        return (
-            <li>
-                <NavLink to="/login">Login</NavLink>
-            </li>
-        );
-    }
-}
+import { LoginContext, UserContext } from './App';
 
 function testListener() {
     window.open("https://www.youtube.com/watch?v=e58hWzRS8iE")
 }
 
 function projectLink() {
-    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project")
+    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project/tree/full")
 }
 
 function Navbar() {
 
+    const [profileTrigger, setProfileTrigger] = useState(false);
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
+    const [user, setUser] = useContext(UserContext);
+
+    function navLogin(check) {
+        if (check) {
+            return (
+                <li onClick={() => setProfileTrigger(!profileTrigger)}>
+                    Profile
+                </li>
+            );
+        } else {
+            return (
+                <li>
+                    <NavLink to="/login">Login</NavLink>
+                </li>
+            );
+        }
+    }
+
+    function display(bool) {
+        if (bool) {
+            return "profile-tab seen"
+        } else {
+            return "profile-tab unseen"
+        }
+    }
+
+    function logout() {
+        setUser({username: "No User"})
+        setLoggedIn(false)
+        setProfileTrigger(false)
+    }
 
     return (
         <nav className='navbar'>
@@ -43,8 +59,7 @@ function Navbar() {
                         <li>
                             <NavLink to="/">Home</NavLink>
                         </li>
-                        <li onClick={() => setLoggedIn(!loggedIn)}>
-                            {/* temporary toggle for logged in state */}
+                        <li>
                             Map
                         </li>
                         <li>
@@ -56,6 +71,10 @@ function Navbar() {
                         {navLogin(loggedIn)}
                     </ul>
                 </div>
+            </div>
+            <div className={display(profileTrigger)}>
+                    <p className='active-user'>Logged in as: <br/> {user.username}</p>
+                    <span className='logout-button' onClick={logout}>Log out</span>
             </div>
         </nav>
     );

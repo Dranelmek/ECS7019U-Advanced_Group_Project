@@ -1,25 +1,30 @@
 .Login-header {
     background-color: rgb(223, 223, 221);
+    padding-top: 23vh;
+}
+
+.Login-container {
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: calc(10px + 2vmin);
+    font-size: calc(9px + 2vmin);
     color: black;
-  }
+}
 
 .Login-title {
     font-size: 70px;
 }
+
 .Login-form-container {
     background-color: rgb(139, 125, 106);
     border-radius: 11px;
     width: 40vw;
     min-width: 200px;
-    height: 50%;
+    height: 40vh;
     max-height: 300px;
-    min-height: 155px;
+    min-height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,4 +54,6 @@
     background-color: rgb(205, 181, 152);
     border-radius: 4px;
     margin-top: 1%;
+    padding: 5px;
+    margin-left: 3px;
 }

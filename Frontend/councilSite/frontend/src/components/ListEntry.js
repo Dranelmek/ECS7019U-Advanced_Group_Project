@@ -5,10 +5,8 @@ import minIcon from './assets/mini-icon.png'
 import { Link } from 'react-router-dom'
 import { LoginContext } from './App'
 
-
-
 function ListEntry(props) {
-    
+
     function deleteButton(bool) {
         if (bool) {
             return (<span className='delete-button' onClick={deleteAlert}>Delete</span>)
@@ -37,15 +35,17 @@ function ListEntry(props) {
     if (isExpanded) {
         return (
             <div className='list-entry expanded' id={props.id}>
-                <img src={props.pothole.image} alt="pothole" className='pothole-image'/>
+                <img src={`http://localhost:8800/api/file/${props.pothole.image}`} alt="pothole" className='pothole-image'/>
                 <div className='description-box'>
                     <div className='pothole-location'>
                         location: {props.pothole.location}
                     </div>
                     <div className='pothole-details'>
-                        <div className='pothole-video'>
-                            This pothole's video can be found <Link to={`#${props.id}`} onClick={() => {window.open(props.pothole.video)}}>here</Link>.
-                        </div>
+                        <video className="pothole-video" controls>
+                            <source 
+                            src={`http://localhost:8800/api/file/${props.pothole.video}`} 
+                            />
+                        </video>
                         <div className='pothole-severity'>
                             {severity(props.pothole.repairment_needed)}
                         </div>
@@ -60,7 +60,7 @@ function ListEntry(props) {
     } else {
         return (
             <div className='list-entry compact' id={props.id}>
-                <img src={props.pothole.image} alt="pothole" className='pothole-image'/>
+                <img src={`http://localhost:8800/api/file/${props.pothole.image}`} alt="pothole" className='pothole-image'/>
                 <div className='pothole-location'>
                     location: {props.pothole.location}
                 </div>

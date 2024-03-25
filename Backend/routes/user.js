@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
-//Get all users 
+// Get all users 
 router.get("/allUsers", async (req, res) => {
   try {
     // Retrieve all users from the database
@@ -41,14 +41,10 @@ router.post("/addStaff", async (req, res) => {
   } catch (err) {
     if (err.code === 11000) {
       const field = err.message.split('index: ')[1].split('_')[0];
-
+      
       // Duplicate key error handling accordingly
       if (field === 'username') {
         res.status(400).json('Username already exists');
-      } else if (field === 'email') {
-        res.status(401).json('Email already being used' );
-      } else {
-        res.status(402).json('Duplicate key error, please double check your fields');
       }
     } else {
       // Other error handle accordingly
@@ -57,15 +53,15 @@ router.post("/addStaff", async (req, res) => {
   }
 });
 
-// LOGIN
+// Login
 router.post("/login", async (req, res) => {
   try {
     // Find the user with the username user inputted
     const user = await User.findOne({ username: req.body.username });
 
-    // If email is not found, return status 401
+    // If username is not found, return status 401
     if (!user) {
-      return res.status(401).json("Email not found");
+      return res.status(401).json("Username not found");
     }
 
     // Use the bcrypt library to compare the password in the request body to the hashed password stored in the database
@@ -79,7 +75,6 @@ router.post("/login", async (req, res) => {
     // If everything is correct, then it will return 200
     res.status(200).json(user);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });

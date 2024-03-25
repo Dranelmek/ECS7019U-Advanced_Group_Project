@@ -3,6 +3,7 @@ import { APILINK } from './App';
 import './styles/Register.css';
 
 
+
 function AddPothole() {
     const [location, setLocation] = useState("");
     const [repairmentNeeded, setRepairmentNeeded] = useState(false);
@@ -15,7 +16,7 @@ function AddPothole() {
         const formData = new FormData();
         const imageFileName = Date.now() + image.name;
         const videoFileName = Date.now() + video.name;
-        formData.append("files", image, imageFileName);
+        formData.append("image", image, imageFileName);
         formData.append("video", video, videoFileName);
     
         try {

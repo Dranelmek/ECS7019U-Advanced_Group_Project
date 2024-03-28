@@ -18,16 +18,24 @@ describe('Test upload and download files (image, videos) ', () => {
 
   // Testing the upload of a image file
   it('Should upload image file successfully', async () => {
-    // Make a POST request with the image file
-    const response = await request(app)
-      .post('/api/upload')
-      .attach('files', 'testfiles/test.jpg');
-
-    // Expected response
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Files uploaded successfully');
-    expect(response.body.files).toBeDefined();
+    try {
+      // Make a POST request with the image file
+      const response = await request(app)
+        .post('/api/upload')
+        .attach('image', 'testfiles/test.jpg');
+      
+      console.log(response.body);
+      // Expected response
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Files uploaded successfully');
+      expect(response.body.files).toBeDefined();
+    } catch (error) {
+      // Log any errors that occur during the test
+      console.log('Error occurred during test:', error);
+      throw error; // Rethrow the error to fail the test
+    }
   });
+  
 
   // Testing the download of an existing image file
   it('Should download an existing image file successfully', async () => {
@@ -53,7 +61,7 @@ describe('Test upload and download files (image, videos) ', () => {
     // Make a POST request for the video file
     const response = await request(app)
       .post('/api/upload')
-      .attach('files', 'testfiles/testVideo.mp4'); 
+      .attach('video', 'testfiles/testVideo.mp4'); 
 
     // Expected response
     expect(response.status).toBe(200);

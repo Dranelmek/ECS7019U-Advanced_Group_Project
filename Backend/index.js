@@ -84,25 +84,33 @@ const upload = multer({
 app.post("/api/upload", (req, res) => {
   // Call the upload function to handle file upload
   upload(req, res, (err) => {
-    if (err instanceof multer.MulterError) {
-      // If multer encounters an error, return a 500 error response
-      return res.status(500).json({ message: "Failed to upload files" });
+    if (err) {
+      // Handle any error that occurs during file upload
+      console.log("Error occurred during file upload:", err);
+      let status = 500;
+      let message = "Internal Server Error";
 
-    } else if (err) {
-      // If there's any other error, return a 404 error response
-      console.log(err);
-      return res.status(404).json({ message: err.message });
+      // Check if the error is a Multer error
+      if (err instanceof multer.MulterError) {
+        status = 400; // Bad Request
+        message = "File upload failed due to invalid input";
+      }
+
+      // Return an appropriate error response to the client
+      return res.status(status).json({ message });
     }
+
     // If upload is successful, access the uploaded files information from req.files
     const uploadedFiles = req.files;
 
-    // Return a 200 success response along with uploaded files information
+    // Return a success response along with uploaded files information
     return res.status(200).json({
       message: "Files uploaded successfully",
       files: uploadedFiles,
     });
   });
 });
+
 
 // Access the MongoDB connection instance
 const db = mongoose.connection;
@@ -140,9 +148,12 @@ app.get('/api/file/:filename', (req, res) => {
 
   // If an error occurs during the download stream, send a 404 response
   downloadStream.on('error', error => {
-    res.sendStatus(404); 
+    // Log the error to the console
+    console.log('Error occurred during file download:', error);
+    res.sendStatus(404); // Send a 404 response
   });
 });
+
 
 // Define a route for the root endpoint ("/") and provide a welcome message
 app.get("/", (req, res) => {

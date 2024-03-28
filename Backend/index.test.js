@@ -24,7 +24,6 @@ describe('Test upload and download files (image, videos) ', () => {
         .post('/api/upload')
         .attach('image', 'testfiles/test.jpg');
       
-      console.log(response.body);
       // Expected response
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Files uploaded successfully');
@@ -36,11 +35,10 @@ describe('Test upload and download files (image, videos) ', () => {
     }
   });
   
-
   // Testing the download of an existing image file
   it('Should download an existing image file successfully', async () => {
     // Make a GET request for the existing image file
-    const response = await request(app).get('/api/file/1708285643584test.jpg');
+    const response = await request(app).get('/api/file/test.jpg');
 
     // Expected response
     expect(response.status).toBe(200);
@@ -72,7 +70,7 @@ describe('Test upload and download files (image, videos) ', () => {
   // Testing the download of an existing video file
   it('Should download an existing video file successfully', async () => {
     // Make a GET request for the video file
-    const response = await request(app).get('/api/file/1708285643584testVideo.mp4'); 
+    const response = await request(app).get('/api/file/testVideo.mp4'); 
 
     // Expected response
     expect(response.status).toBe(200);
@@ -92,20 +90,39 @@ describe('Test upload and download files (image, videos) ', () => {
 describe('Pothole Router Tests', () => {
 
     // Testing for creating a new pothole
-    it('Should create a new pothole', async () => {
-      const newPothole = {
-        'location': 'Test Location',
-        'video': 'Test Video',
-        'image': 'Test Image',
-        'severe_level': 'High',
-        'repairment_needed': true,
+    it('should add a new pothole when given valid inputs', async () => {
+      const newPotholeData = {
+        location: '40.7128; 74.0060',
+        video: 'test.jpg',
+        image: 'testVideo.mp4',
+        severe_level: 'high',
+        repairment_needed: true
       };
-      // Make a POST request for creating a new pothole
-      const response = await request(app).post('/pothole/addNewPothole').send(newPothole);
+
+      // Make a POST request for the new pothole
+      const response = await request(app).post('/pothole/addNewPothole').send(newPotholeData);
 
       // Expected response
       expect(response.statusCode).toBe(200);
-      expect(response.body.location).toBe(newPothole.location);
+      expect(response.body.location).toBe(newPotholeData.location);
+    });
+
+    // Testing for creating a new pothole with close location that already existed.
+    it('should return an error message if location are too close to an exisiting pothole', async () => {
+      const newPotholeData = {
+        location: '40.7128; 74.0060',
+        video: 'test.jpg',
+        image: 'testVideo.mp4',
+        severe_level: 'high',
+        repairment_needed: true
+      };
+  
+      // Make a POST request to create a new pothole
+      const response = await request(app).post('/pothole/addNewPothole').send(newPotholeData);
+  
+      // Expected response
+      expect(response.status).toBe(400);
+      expect(response.body.error).toEqual('Location is too close to an existing pothole.');
     });
   
     // Testing for retrieving all potholes
@@ -122,7 +139,7 @@ describe('Pothole Router Tests', () => {
     it('Should get a pothole by ID', async () => {
       // Make a POST request for creating a new pothole
       const newPotholeResponse = await request(app).post('/pothole/addNewPothole').send({
-        location: 'Test Location',
+        location: '43.7128; 73.0060',
         video: 'Test Video',
         image: 'Test Image',
         severe_level: 'High',
@@ -134,7 +151,7 @@ describe('Pothole Router Tests', () => {
 
       // Expected response
       expect(response.statusCode).toBe(200);
-      expect(response.body.location).toBe('Test Location');
+      expect(response.body.location).toBe('43.7128; 73.0060');
     });
 
   
@@ -142,7 +159,7 @@ describe('Pothole Router Tests', () => {
     it('Should delete a pothole by ID', async () => {
       // Make a POST request for creating a new pothole
       const newPothole = await request(app).post('/pothole/addNewPothole').send({
-        location: 'Test Location',
+        location: '47.7128; 76.0060',
         video: 'Test Video',
         image: 'Test Image',
         severe_level: 'High',

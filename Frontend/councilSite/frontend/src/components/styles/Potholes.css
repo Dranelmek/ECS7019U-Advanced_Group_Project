@@ -22,6 +22,12 @@
   padding-bottom: 50px;
 }
 
+.no-holes {
+  margin-top: 10%;
+  font-weight: bolder;
+  font-size: 50px;
+}
+
 .alone {
   position: relative;
   right: 38%;

@@ -2,36 +2,23 @@ import './styles/Potholes.css'
 import ListEntry from './ListEntry';
 import { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { APILINK } from './App';
+import { APILINK, PotholeContext } from './App';
 
 function Potholes() {
     
     const [CFA, setCFA] = useState(0)
-    const [potholeList, setPotholeList] = useState([0])
-
-    useEffect(() => {
-        const  fetchPotholes = async () => {
-            const response = await fetch(
-                `${APILINK}pothole`,
-                {
-                    method: 'GET'
-                }
-            )
-            const data = await response.json()
-            setPotholeList(data)
-        }
-        fetchPotholes()
-    }, [])
-
+    const [potholeList, setPotholeList] = useContext(PotholeContext)
     
     useEffect(() => {
         if (potholeList.length > 5) {
             setCFA(5)
-        } 
+        } else {
+            setCFA(potholeList.length)
+        }
     }, [potholeList])
 
     function changeListSize(size) {
-        if (potholeList.length < size) {
+        if (potholeList.length < size || potholeList.length == 1) {
             return (
                 <div hidden>
                 </div>
@@ -81,7 +68,22 @@ function Potholes() {
         setCFA(potholeList.length)
     }
 
-
+    function noHoles() {
+        if (potholeList.length < 1) {
+            return(
+                <div className='no-holes'>
+                <p>No Potholes Detected</p>
+                </div>
+            )
+        } else {
+            return(
+                <div className='List-container'>
+                {holes}
+                {changeListSize(CFA)}
+                </div>
+            )
+        }
+    }
     
 
     let holes = [...Array(CFA)].map((value, index) => (
@@ -91,8 +93,7 @@ function Potholes() {
     return(
         <header className='List-header'>
             <div className='List-container'>
-            {holes}
-            {changeListSize(CFA)}
+            {noHoles()}
             </div>
         </header>
     );

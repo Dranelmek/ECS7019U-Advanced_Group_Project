@@ -12,6 +12,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 
 export const LoginContext = createContext()
 export const UserContext = createContext()
+export const PotholeContext = createContext()
 export const APILINK = "http://localhost:8800/"
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({username: "No User"});
   const [cookies, setCookie] = useCookies(["activeUser", "login"])
+  const [potholeList, setPotholeList] = useState([0])
 
   useEffect(() => {
     setCookie("activeUser", user, {path: "/"});
@@ -34,6 +36,20 @@ function App() {
       setLoggedIn(cookies.login);
     }
   }, []);
+
+  useEffect(() => {
+    const  fetchPotholes = async () => {
+        const response = await fetch(
+            `${APILINK}pothole`,
+            {
+                method: 'GET'
+            }
+        )
+        const data = await response.json()
+        setPotholeList(data)
+    }
+    fetchPotholes()
+  }, [])
   
   return (
     <CookiesProvider>
@@ -42,6 +58,7 @@ function App() {
         
           <UserContext.Provider value={[user, setUser]}>
           <LoginContext.Provider value={[loggedIn, setLoggedIn]}>
+          <PotholeContext.Provider value={[potholeList, setPotholeList]}>
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -51,6 +68,7 @@ function App() {
               <Route path="/map" element={<PotholeMap />}/>
               <Route path="/add_pothole" element={<AddPothole />} />
             </Routes>
+          </PotholeContext.Provider>
           </LoginContext.Provider>
           </UserContext.Provider>
           

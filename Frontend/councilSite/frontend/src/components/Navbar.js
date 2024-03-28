@@ -1,12 +1,8 @@
 import './styles/Navbar.css';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate, Navigate } from 'react-router-dom';
 import logo from './assets/logo.jpg';
 import { useContext, useState } from 'react';
 import { LoginContext, UserContext } from './App';
-
-function testListener() {
-    window.open("https://www.youtube.com/watch?v=e58hWzRS8iE")
-}
 
 function projectLink() {
     window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project/tree/full")
@@ -51,7 +47,7 @@ function Navbar() {
     return (
         <nav className='navbar'>
             <div className='container'>
-                <Link to='/' className='logo' onClick={testListener}>
+                <Link to='/' className='logo' onClick={Navigate("/Home")}>
                     <img id='logo' src={logo} alt="Pothole Detector" />
                 </Link>
                 <div className='navbarContent'>

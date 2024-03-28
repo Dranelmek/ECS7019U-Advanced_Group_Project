@@ -19,3 +19,8 @@
     height: 90vh;
     z-index: 100;
 }
+
+.location-marker {
+    top: -34px;
+    left: -15px;
+}

@@ -126,13 +126,13 @@ def to_video_and_upload(frames_queue, frame_rate, height, width, upload):
     img_path = r"output_img\\"
     if target_name:  # if there is a name for the frame it is a frame with a detected pothole
         create_video_from_frames(frames_queue, (vid_path + target_name + ".mp4"), frame_rate, height, width)
-        cv2.imwrite(("img" + vid_path + target_name + ".jpg"), target[0])
+        # cv2.imwrite(("img" + vid_path + target_name + ".jpg"), target[0])
 
         if upload:
             image_file_name = target_name + ".jpg"
             video_file_name = target_name + ".mp4"
-            image_path = vid_path + target_name + ".mp4"
-            video_path = img_path + target_name + ".jpg"
+            video_path = vid_path + target_name + ".mp4"
+            image_path = img_path + target_name + ".jpg"
 
             print(target_location)
             print(image_file_name)
@@ -275,19 +275,19 @@ if __name__ == "__main__":
     # result = main(args.video_path, upload=False, to_video=True)
 
     # USE SPECIFIC PATH
-    failed_count, frames_checked, dark_count = main("testVideo.ts", upload=False, to_video=True)
-    failed_count_total += failed_count
-    frames_checked_total += frames_checked
-    dark_count_total += dark_count
+    # failed_count, frames_checked, dark_count = main("testVideo.ts", upload=True, to_video=True)
+    # failed_count_total += failed_count
+    # frames_checked_total += frames_checked
+    # dark_count_total += dark_count
 
-    # files = os.listdir("dashcam_videos")
-    # for file_name in files:
-    #     video_path = os.path.join("dashcam_videos", file_name)
-    #     print(video_path)
-    #     failed_count, frames_checked, dark_count = main(video_path=video_path, upload=False, to_video=False)
-    #     failed_count_total += failed_count
-    #     frames_checked_total += frames_checked
-    #     dark_count_total += dark_count
+    files = os.listdir("dashcam_videos")
+    for file_name in files:
+        video_path = os.path.join("dashcam_videos", file_name)
+        print(video_path)
+        failed_count, frames_checked, dark_count = main(video_path=video_path, upload=False, to_video=True)
+        failed_count_total += failed_count
+        frames_checked_total += frames_checked
+        dark_count_total += dark_count
 
     print()
     print("failed count:", failed_count_total)

@@ -1,0 +1,155 @@
+.list-entry {
+    background-color: rgb(245, 234, 219);
+    padding: 1vh 2vw;
+    border-radius: 7px;
+    margin: 7px 0;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    transition: 0.3s;
+    min-width: 770px;
+}
+
+.pothole-location {
+    font-size: calc(17px + 1vmin);
+}
+
+.pothole-image {
+    margin-right: 3%;
+}
+
+.pothole-video {
+    max-width: 270px;
+    margin-top: 2%;
+}
+
+.pothole-details {
+    overflow: hidden;
+}
+
+.compact {
+    align-items: center;
+    max-height: 120px;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 225px;
+    max-width: 400px;
+}
+
+.compact .pothole-image {
+    height: 100px;
+    transition: 0.3s;
+    max-width: 150px;
+    object-fit: cover;
+}
+
+.expanded .pothole-image {
+    width: 90%;
+    height: auto;
+}
+
+.expanded {
+    min-height: 200px;
+    max-height: 350px;
+}
+
+.expanded .pothole-details {
+    padding-top: 2%;
+}
+
+.pothole-severity {
+    padding-top: 2vh;
+    position: relative;
+}
+
+.util-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.expand-button {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    padding: 2px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0,3s;
+    animation: 0.3s fadeIn ease-in;
+}
+
+.expanded .expand-button {
+    right: calc(20px + 30vw);
+}
+
+.compact .expand-button {
+    right: calc(20px + 30vw);
+}
+
+@media (max-width: 1650px) {
+    .compact .expand-button {
+        right: calc(50px + 20vw);
+    }
+    .expanded .expand-button {
+        right: calc(50px + 20vw);
+    }
+}
+
+@media (max-width: 1220px) {
+    .compact .expand-button {
+        right: calc(70px + 10vw);
+    }
+    .expanded .expand-button {
+        right: calc(70px + 10vw);
+    }
+}
+
+@media (min-width: 2300px) {
+    .compact .expand-button {
+        right: calc(70px + 30vw);
+    }
+    .expanded .expand-button {
+        right: calc(70px + 30vw);
+    }
+}
+
+.expand-button:hover {
+    background-color: rgb(255, 248, 233);
+    transition: 0.3s;
+}
+
+
+.expand-button .expand-icon {
+    height: 25px;
+}
+
+.delete-button {
+    position: relative;
+    color: whitesmoke;
+    background-color: rgb(139, 125, 106);
+    margin-left: 40px;
+    margin-top: 160px;
+    width: 50px;
+    height: 16px;
+    padding: 8px;
+    font-weight: bolder;
+    border-radius: 7px;
+}
+
+.delete-button:hover {
+    background-color: red;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+@keyframes fadeIn {
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}

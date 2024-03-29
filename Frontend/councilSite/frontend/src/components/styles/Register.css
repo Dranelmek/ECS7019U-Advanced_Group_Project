@@ -1,0 +1,58 @@
+.Register-header {
+    background-color: rgb(223, 223, 221);
+    padding-top: 18vh;
+}
+
+.Register-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(9px + 2vmin);
+    color: black;
+    padding-bottom: 7px;
+}
+
+.Register-title {
+    font-size: 70px;
+}
+.Register-form-container {
+    background-color: rgb(139, 125, 106);
+    border-radius: 11px;
+    width: 50vw;
+    min-width: 200px;
+    height: 50%;
+    max-height: 600px;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Register-form {
+    width: 80%;
+
+}
+
+.Register-form label {
+    font-weight: bold;
+}
+
+.Register-form .Textfield {
+    background-color: rgb(223, 223, 221);
+    border-color: rgb(132, 111, 86);
+    border-radius: 5px;
+    width: 98%;
+    height: 30px;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.Register-button {
+    float: right;
+    background-color: rgb(205, 181, 152);
+    border-radius: 4px;
+    margin-top: 1%;
+    padding: 5px;
+}

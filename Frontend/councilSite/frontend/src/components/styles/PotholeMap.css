@@ -1,0 +1,26 @@
+.Map-header {
+    background-color: rgb(223, 223, 221);
+    padding-top: 8.5vh;
+}
+
+.Map-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(9px + 2vmin);
+    color: black;
+}
+
+.Map-wrapper {
+    background-color: black;
+    width: 90vh;
+    height: 90vh;
+    z-index: 100;
+}
+
+.location-marker {
+    top: -34px;
+    left: -15px;
+}

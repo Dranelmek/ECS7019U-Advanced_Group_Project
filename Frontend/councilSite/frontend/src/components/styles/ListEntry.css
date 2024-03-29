@@ -32,20 +32,24 @@
     max-height: 120px;
 }
 
-.pothole-image {
-    object-fit: cover;
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 225px;
+    max-width: 400px;
 }
 
 .compact .pothole-image {
     height: 100px;
     transition: 0.3s;
     max-width: 150px;
+    object-fit: cover;
 }
 
 .expanded .pothole-image {
-    height: 225px;
-    transition: 0.3s;
-    max-width: 340px;
+    width: 90%;
+    height: auto;
 }
 
 .expanded {
@@ -104,6 +108,15 @@
     }
     .expanded .expand-button {
         right: calc(70px + 10vw);
+    }
+}
+
+@media (min-width: 2300px) {
+    .compact .expand-button {
+        right: calc(70px + 30vw);
+    }
+    .expanded .expand-button {
+        right: calc(70px + 30vw);
     }
 }
 

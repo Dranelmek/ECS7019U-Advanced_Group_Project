@@ -22,6 +22,12 @@
   padding-bottom: 50px;
 }
 
+.no-holes {
+  margin-top: 10%;
+  font-weight: bolder;
+  font-size: 50px;
+}
+
 .alone {
   position: relative;
   right: 38%;
@@ -30,6 +36,7 @@
 
 .show-less-all {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  gap: 70vw;
+  gap: calc(500px + 10vw);
 }

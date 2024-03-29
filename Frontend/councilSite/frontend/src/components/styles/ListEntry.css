@@ -32,14 +32,24 @@
     max-height: 120px;
 }
 
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 225px;
+    max-width: 400px;
+}
+
 .compact .pothole-image {
     height: 100px;
     transition: 0.3s;
+    max-width: 150px;
+    object-fit: cover;
 }
 
 .expanded .pothole-image {
-    height: 225px;
-    transition: 0.3s;
+    width: 90%;
+    height: auto;
 }
 
 .expanded {
@@ -64,7 +74,7 @@
 .expand-button {
     width: 25px;
     height: 25px;
-    position: relative;
+    position: absolute;
     padding: 2px;
     border-radius: 7px;
     display: flex;
@@ -76,11 +86,38 @@
 }
 
 .expanded .expand-button {
-    left: 85px;
+    right: calc(20px + 30vw);
 }
 
 .compact .expand-button {
-    left: 270px;
+    right: calc(20px + 30vw);
+}
+
+@media (max-width: 1650px) {
+    .compact .expand-button {
+        right: calc(50px + 20vw);
+    }
+    .expanded .expand-button {
+        right: calc(50px + 20vw);
+    }
+}
+
+@media (max-width: 1220px) {
+    .compact .expand-button {
+        right: calc(70px + 10vw);
+    }
+    .expanded .expand-button {
+        right: calc(70px + 10vw);
+    }
+}
+
+@media (min-width: 2300px) {
+    .compact .expand-button {
+        right: calc(70px + 30vw);
+    }
+    .expanded .expand-button {
+        right: calc(70px + 30vw);
+    }
 }
 
 .expand-button:hover {

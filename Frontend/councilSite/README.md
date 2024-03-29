@@ -39,4 +39,4 @@ Counsil Webpage
   npm start
   
 #Thanks to:
-* me, myself, and I....no, other people you egotistical ass.
+* me, myself, and I....no, other people you egotistical ass... Ok fine Pandora did a lot too

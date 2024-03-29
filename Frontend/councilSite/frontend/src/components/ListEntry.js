@@ -35,7 +35,9 @@ function ListEntry(props) {
     if (isExpanded) {
         return (
             <div className='list-entry expanded' id={props.id}>
-                <img src={`http://localhost:8800/api/file/${props.pothole.image}`} alt="pothole" className='pothole-image'/>
+                <div className="image-container">
+                    <img src={`http://localhost:8800/api/file/${props.pothole.image}`} alt="pothole" className='pothole-image'/>
+                </div>
                 <div className='description-box'>
                     <div className='pothole-location'>
                         location: {props.pothole.location}

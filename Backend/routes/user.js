@@ -31,7 +31,8 @@ router.post("/addStaff", async (req, res) => {
       password: hashedPassword,
       user_first_name: req.body.user_first_name,
       user_last_name: req.body.user_last_name,
-      email: req.body.email
+      email: req.body.email,
+      isAdmin: req.body.isAdmin
     });
 
     //save user and respond

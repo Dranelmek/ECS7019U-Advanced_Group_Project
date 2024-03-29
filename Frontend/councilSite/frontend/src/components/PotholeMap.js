@@ -2,6 +2,7 @@ import './styles/PotholeMap.css';
 import GoogleMapReact from 'google-map-react'
 import { useState, useEffect, useContext } from 'react';
 import { PotholeContext } from './App';
+import warning from "./assets/035-pothole.png";
 import m1 from './assets/marker_1.png';
 import m2 from './assets/marker_2.png';
 import m3 from './assets/marker_3.png';
@@ -39,7 +40,7 @@ function PotholeMap() {
         <img 
         id={index} 
         className="location-marker"
-        src={markerColor(Number(potholeList[index]["severe_level"]))} 
+        src={warning} 
         alt="HERE!" 
         lat={latLongSplit(potholeList[index]["location"])[0]}
         lng={latLongSplit(potholeList[index]["location"])[1]}

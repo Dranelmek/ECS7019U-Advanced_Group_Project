@@ -36,6 +36,7 @@
 
 .show-less-all {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  gap: 70vw;
+  gap: calc(500px + 10vw);
 }

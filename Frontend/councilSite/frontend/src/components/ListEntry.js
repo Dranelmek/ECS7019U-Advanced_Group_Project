@@ -16,8 +16,18 @@ function ListEntry(props) {
     }
 
     function deleteAlert() {
-        // TODO: add logic for api deletion
-        window.alert("Deletion requested")
+        let ID = props.pothole._id
+        const  killPothole = async () => {
+            const response = await fetch(
+                `${APILINK}pothole/deletePothole/${ID}`,
+                {
+                    method: 'DELETE'
+                }
+            )
+            const data = await response.json()
+        }
+        killPothole()
+        window.alert("Pothole deleted.")
     }
 
     const [isExpanded, setIsExpanded] = useState(false);

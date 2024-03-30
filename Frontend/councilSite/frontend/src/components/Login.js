@@ -13,10 +13,6 @@ function Login() {
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const [globalUser, setGUser] = useContext(UserContext);
 
-    function toRegister() {
-        navigate("/register");
-    }
-
     async function loginRequest() {
         const payload = {
             username: user,
@@ -78,7 +74,6 @@ function Login() {
                         onChange={(e) => setPass(e.target.value)}
                         className="Textfield"/><br/>
                         <input type="button" value="Login" className="Login-button" onClick={loginRequest}/>
-                        <input type="button" value="Register" className="Login-button" onClick={toRegister}/>
                     </form>
                 </div>
             </div>

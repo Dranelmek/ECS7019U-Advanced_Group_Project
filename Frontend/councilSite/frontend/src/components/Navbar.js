@@ -5,7 +5,7 @@ import { useContext, useState } from 'react';
 import { LoginContext, UserContext } from './App';
 
 function projectLink() {
-    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project/tree/full")
+    window.open("https://github.com/Dranelmek/ECS7019U-Advanced_Group_Project")
 }
 
 function Navbar() {

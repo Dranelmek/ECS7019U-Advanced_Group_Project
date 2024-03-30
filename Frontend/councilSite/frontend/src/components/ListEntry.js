@@ -3,9 +3,11 @@ import { useState, useContext } from 'react'
 import expanndIcon from './assets/expand-icon.png'
 import minIcon from './assets/mini-icon.png'
 import { Link } from 'react-router-dom'
-import { LoginContext } from './App'
+import { APILINK, LoginContext, PotholeContext } from './App'
 
 function ListEntry(props) {
+
+    const [_, setPotholeList] = useContext(PotholeContext)
 
     function deleteButton(bool) {
         if (bool) {
@@ -13,6 +15,20 @@ function ListEntry(props) {
         } else {
             return <div hidden></div>
         }
+    }
+
+    function deleteCleanup() {
+        const  fetchPotholes = async () => {
+            const response = await fetch(
+                `${APILINK}pothole`,
+                {
+                    method: 'GET'
+                }
+            )
+            const data = await response.json()
+            setPotholeList(data)
+        }
+        fetchPotholes()
     }
 
     function deleteAlert() {
@@ -27,7 +43,9 @@ function ListEntry(props) {
             const data = await response.json()
         }
         killPothole()
+        deleteCleanup()
         window.alert("Pothole deleted.")
+        window.location.reload()
     }
 
     const [isExpanded, setIsExpanded] = useState(false);

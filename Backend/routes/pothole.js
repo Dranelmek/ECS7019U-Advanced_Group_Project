@@ -92,9 +92,9 @@ router.get("/:id", async (req, res) => {
 // Delete a pothole
 router.delete("/deletePothole/:id", async (req, res) => {
   try {
-    const pothole = await Pothole.remove({_id: req.params.id});
+    const pothole = await Pothole.deleteOne({_id: req.params.id});
 
-    res.status(200).json("Deleted pothole!");
+    res.status(200).json({ message: "Pothole deleted successfully." });
   } catch (err) {
     res.status(500).json({ 
       error: "Internal Server Error", 
@@ -108,7 +108,7 @@ router.delete("/deleteAllPotholes", async (req, res) => {
   try {
     // Deleting all users
     const result = await Pothole.deleteMany({});
-    res.status(200).json(result);
+    res.status(200).json({ message: "All potholes deleted successfully." });
   } catch (err) {
     res.status(500).json(err);
   }

@@ -64,11 +64,11 @@ function Register() {
             <div className='Register-container'>
                 <div className="Page-title">
                 <p className="Register-title">Pothole Detection</p>
-                <p className="Register-subtitle">Register</p>
+                <p data-testid="Register-subtitle" className="Register-subtitle">Register</p>
                 </div>
                 <div className="Register-form-container">
-                    <form className="Register-form" method='post'>
-                        <label for="username" >Username:</label><br/>
+                    <form data-testid="Register-form" className="Register-form" method='post'>
+                        <label htmlFor="username" >Username:</label><br/>
                         <input 
                         type="text" 
                         id="username" 
@@ -76,7 +76,7 @@ function Register() {
                         value={user}
                         onChange={(e) => setUser(e.target.value)}
                         className="Textfield"/><br/>
-                        <label for="email">Email:</label><br/>
+                        <label htmlFor="email">Email:</label><br/>
                         <input 
                         type="text" 
                         id="email" 
@@ -84,7 +84,7 @@ function Register() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="Textfield"/><br/>
-                        <label for="first-name">First Name:</label><br/>
+                        <label htmlFor="first-name">First Name:</label><br/>
                         <input 
                         type="text" 
                         id="first-name" 
@@ -92,7 +92,7 @@ function Register() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="Textfield"/><br/>
-                        <label for="last-name">Last Name:</label><br/>
+                        <label htmlFor="last-name">Last Name:</label><br/>
                         <input 
                         type="text" 
                         id="last-name" 
@@ -100,16 +100,18 @@ function Register() {
                         value={lName}
                         onChange={(e) => setLName(e.target.value)}
                         className="Textfield"/><br/>
-                        <label for="password">Password:</label><br/>
+                        <label htmlFor="password">Password:</label><br/>
                         <input 
+                        data-testid="password"
                         type="password" 
                         id="password" 
                         name="password" 
                         value={pass}
                         onChange={(e) => setPass(e.target.value)}
                         className="Textfield"/><br/>
-                        <label for="confirm">Confirm Password:</label><br/>
+                        <label htmlFor="confirm">Confirm Password:</label><br/>
                         <input 
+                        data-testid="password"
                         type="password" 
                         id="confirm" 
                         name="confirm" 

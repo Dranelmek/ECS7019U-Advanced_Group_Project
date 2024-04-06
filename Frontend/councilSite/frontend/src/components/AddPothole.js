@@ -90,7 +90,7 @@ function AddPothole() {
                 </div>
                 <div className="Register-form-container">
                     <form className="Register-form" method='post'>
-                        <label for="username" >Location:</label><br/>
+                        <label htmlFor="username" >Location:</label><br/>
                         <input 
                         type="text" 
                         id="username" 
@@ -99,7 +99,7 @@ function AddPothole() {
                         onChange={(e) => setLocation(e.target.value)}
                         className="Textfield"/><br/>
 
-                        <label for="email">Video:</label><br/>
+                        <label htmlFor="email">Video:</label><br/>
                         <label className="addVideo">
                             <span>Click here add Video</span>
                             <input
@@ -111,7 +111,7 @@ function AddPothole() {
                             />
                         </label><br/>
 
-                        <label for="first-name">Image:</label><br/>
+                        <label htmlFor="first-name">Image:</label><br/>
 
                         {image && (
                             <div className="shareImgContainer">
@@ -129,7 +129,7 @@ function AddPothole() {
                             />
                         </label><br /><br />
 
-                        <label for="last-name">Severe level:</label><br/>
+                        <label htmlFor="last-name">Severe level:</label><br/>
                         <input 
                         type="text" 
                         id="last-name" 
@@ -138,7 +138,7 @@ function AddPothole() {
                         onChange={(e) => setSevereLevel(e.target.value)}
                         className="Textfield"/><br/>
 
-                        <label for="password">Repairment needed:</label><br/>
+                        <label htmlFor="password">Repairment needed:</label><br/>
                         <input 
                         type="text" 
                         id="password" 

@@ -71,7 +71,7 @@ function ListEntry(props) {
                         location: {props.pothole.location}
                     </div>
                     <div className='pothole-details'>
-                        <video className="pothole-video" controls>
+                        <video data-testid="pothole-video" className="pothole-video" controls>
                             <source 
                             src={`http://localhost:8800/api/file/${props.pothole.video}`} 
                             />

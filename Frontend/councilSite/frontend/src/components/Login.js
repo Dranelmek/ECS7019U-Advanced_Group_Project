@@ -57,7 +57,7 @@ function Login() {
                 </div>
                 <div className="Login-form-container">
                     <form data-testid="Login-form" className="Login-form" method='post'>
-                        <label for="username" >Username:</label><br/>
+                        <label htmlFor="username" >Username:</label><br/>
                         <input 
                         type="text" 
                         id="username" 
@@ -65,7 +65,7 @@ function Login() {
                         value={user}
                         onChange={(e) => setUser(e.target.value)}
                         className="Textfield"/><br/>
-                        <label for="password">Password:</label><br/>
+                        <label htmlFor="password">Password:</label><br/>
                         <input 
                         data-testid="password"
                         type="password" 

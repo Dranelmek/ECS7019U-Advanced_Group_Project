@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Login from '../components/Login';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import { useState, useContext , createContext} from 'react';
+import { useState } from 'react';
 import { LoginContext, UserContext } from '../components/App';
 
 const MockLogin = () => {
@@ -40,6 +40,13 @@ test('renders login form', async () => {
   expect(formElement).toBeInTheDocument();
 });
 
+test('renders login field label', async () => {
+
+  render(<MockLogin />);
+  const inputElement = screen.getByLabelText("Username:")
+  expect(inputElement).toBeInTheDocument();
+});
+
 test('renders login field', async () => {
 
   render(<MockLogin />);
@@ -66,4 +73,12 @@ test('does not render register button', async () => {
   render(<MockLogin />);
   const inputElement = screen.queryByText(/register/i)
   expect(inputElement).not.toBeInTheDocument();
+});
+
+test('allows text in login field', async () => {
+
+  render(<MockLogin />);
+  const inputElement = screen.getByRole("textbox")
+  fireEvent.change(inputElement, { target: { value: "Hello World!" } })
+  expect(inputElement.value).toBe("Hello World!");
 });

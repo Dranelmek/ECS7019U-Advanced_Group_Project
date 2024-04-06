@@ -53,10 +53,10 @@ function Login() {
             <div className='Login-container'>
                 <div className="Page-title">
                 <p className="Login-title">Pothole Detection</p>
-                <p className="Login-subtitle">Login</p>
+                <p data-testid="Login-subtitle" className="Login-subtitle">Login</p>
                 </div>
                 <div className="Login-form-container">
-                    <form className="Login-form" method='post'>
+                    <form data-testid="Login-form" className="Login-form" method='post'>
                         <label for="username" >Username:</label><br/>
                         <input 
                         type="text" 
@@ -67,6 +67,7 @@ function Login() {
                         className="Textfield"/><br/>
                         <label for="password">Password:</label><br/>
                         <input 
+                        data-testid="password"
                         type="password" 
                         id="password" 
                         name="password" 

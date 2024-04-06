@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { APILINK } from './App';
-import axios from "axios";
 import './styles/Register.css';
 
 

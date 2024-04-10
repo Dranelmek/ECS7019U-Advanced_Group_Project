@@ -171,7 +171,7 @@ describe('Pothole Router Tests', () => {
 
       // Expected response
       expect(response.statusCode).toBe(200);
-      expect(response.body).toBe('Deleted pothole!');
+      expect(response.body).toEqual({"message": "Pothole deleted successfully."});
     });
   
     // Testing for deleting all potholes
@@ -181,7 +181,7 @@ describe('Pothole Router Tests', () => {
 
       // Expected response
       expect(response.statusCode).toBe(200);
-      expect(response.body.ok).toBe(1);
+      expect(response.body).toEqual({"message": "All potholes deleted successfully." });
     });
 });
 

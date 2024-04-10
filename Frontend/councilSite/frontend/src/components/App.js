@@ -49,7 +49,7 @@ function App() {
         setPotholeList(data)
     }
     fetchPotholes()
-  }, [])
+  }, []);
   
   return (
     <CookiesProvider>

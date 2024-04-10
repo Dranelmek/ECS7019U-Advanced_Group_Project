@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Pothole = require("../models/Pothole");
 const geolib = require('geolib'); // Import geolib library for distance calculation
 const mongoose = require("mongoose");
+const axios = require('axios');
 
 //Get all pothole
 router.get("/", async (req, res) => {
@@ -17,11 +18,10 @@ router.get("/", async (req, res) => {
 // Create a new pothole
 router.post("/addNewPothole", async (req, res) => {
   try {
-    const newLocationString = req.body.location;
+    const newLocationString = req.body.coordinates;
     const newLocationArray = newLocationString.split(';'); // Split the string into latitude and longitude
-
     if (newLocationArray.length !== 2) {
-      return res.status(400).json({ error: "Invalid location format." });
+      return res.status(400).json({ error: "Invalid coordinates format." });
     }
 
     const newLocation = {
@@ -29,14 +29,19 @@ router.post("/addNewPothole", async (req, res) => {
       longitude: parseFloat(newLocationArray[1].trim()) // Convert longitude to float
     };
 
-    // Fetch existing pothole locations from the database
-    const existingPotholes = await Pothole.find({}, 'location');
+    // Reverse geocoding to get address from coordinates
+    const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLocation.latitude}&lon=${newLocation.longitude}`);
+    const addressData = response.data;
+    const fullAddress = `${addressData.address.road}, ${addressData.address.postcode}`;
 
-    // Check if the new location is close to any existing pothole
+    // Fetch existing pothole locations from the database
+    const existingPotholes = await Pothole.find({}, 'coordinates');
+
+    // Check if the new coordinates is close to any existing pothole
     const closePothole = existingPotholes.find(pothole => {
-      if (!pothole.location) return false; // Check if location is defined
-      const potholeLocationArray = pothole.location.split(';');
-      if (potholeLocationArray.length !== 2) return false; // Check if location format is correct
+      if (!pothole.coordinates) return false; // Check if coordinates is defined
+      const potholeLocationArray = pothole.coordinates.split(';');
+      if (potholeLocationArray.length !== 2) return false; // Check if coordinates format is correct
       const potholeLatitude = parseFloat(potholeLocationArray[0].trim());
       const potholeLongitude = parseFloat(potholeLocationArray[1].trim());
       if (isNaN(potholeLatitude) || isNaN(potholeLongitude)) return false; // Check if latitude or longitude is valid
@@ -44,19 +49,21 @@ router.post("/addNewPothole", async (req, res) => {
         { latitude: potholeLatitude, longitude: potholeLongitude },
         newLocation
       );
+
       // Setting the distance threshold to <= 4 meters
       return distance <= 4;
     });
 
     if (closePothole) {
-      // Return a response indicating that the location is close to an existing pothole
+      // Return a response indicating that the coordinates is close to an existing pothole
       return res.status(400).json({ error: "Location is too close to an existing pothole." });
     }
 
-    // If the location is not close to any existing pothole, create a new one
+    // If the coordinates is not close to any existing pothole, create a new one
     const newPothole = new Pothole({
       _id: new mongoose.Types.ObjectId(),
-      location: newLocationString,
+      coordinates: newLocationString,
+      address: fullAddress,
       video: req.body.video,
       image: req.body.image,
       severe_level: req.body.severe_level,

@@ -13,8 +13,8 @@ function PotholeMap() {
     
     const defaultProps = {
         center: {
-          lat: 51.465725,
-          lng: 0.167183
+            lat: 51.45288660799587,
+            lng: 0.1659655873913353
         },
         zoom: 13
     };
@@ -32,8 +32,8 @@ function PotholeMap() {
         }
     }
 
-    function latLongSplit(location) {
-        return String(location).split(";")
+    function latLongSplit(coordinates) {
+        return String(coordinates).split(";")
     }
     
     let holes = [...Array(potholeList.length)].map((value, index) => (
@@ -42,8 +42,8 @@ function PotholeMap() {
         className="location-marker"
         src={warning} 
         alt="HERE!" 
-        lat={latLongSplit(potholeList[index]["location"])[0]}
-        lng={latLongSplit(potholeList[index]["location"])[1]}
+        lat={latLongSplit(potholeList[index]["coordinates"])[0]}
+        lng={latLongSplit(potholeList[index]["coordinates"])[1]}
         />
     ));
 

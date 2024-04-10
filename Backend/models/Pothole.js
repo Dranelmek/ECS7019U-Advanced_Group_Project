@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 
 const PotholeSchema = new mongoose.Schema(
   {
-    location: {
+    coordinates: {
       type: String,
-      // require: true
+      require: true
+    },
+    address:{
+      type: String,
+      require: true
     },
     video:{
       type: String

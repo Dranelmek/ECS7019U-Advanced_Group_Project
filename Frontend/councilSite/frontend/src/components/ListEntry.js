@@ -2,33 +2,12 @@ import './styles/ListEntry.css'
 import { useState, useContext, useEffect } from 'react'
 import expanndIcon from './assets/expand-icon.png'
 import minIcon from './assets/mini-icon.png'
-import axios from 'axios';
 import { Link } from 'react-router-dom'
 import { APILINK, LoginContext, PotholeContext } from './App'
 
 function ListEntry(props) {
 
-    const [_, setPotholeList] = useContext(PotholeContext)
-    const [potholelocation, setPotholeLocation] = useState()
-    
-    useEffect(() => {
-        if (props.pothole && props.pothole.location) {
-            const [latitude, longitude] = props.pothole.location.split('; ');
-    
-            // Reverse geocoding to get address from coordinates
-            axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
-            .then(response => {
-                const address = response.data;
-                const fulladdress = (`${address.address.road}, ${address.address.postcode}`)
-                setPotholeLocation(fulladdress);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        }
-    }, [props.pothole]);
-    
-    
+    const [_, setPotholeList] = useContext(PotholeContext);
 
     function deleteButton(bool) {
         if (bool) {
@@ -66,7 +45,7 @@ function ListEntry(props) {
         killPothole()
         deleteCleanup()
         window.alert("Pothole deleted.")
-        window.location.reload()
+        window.coordinates.reload()
     }
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -89,7 +68,7 @@ function ListEntry(props) {
                 </div>
                 <div className='description-box'>
                     <div className='pothole-location'>
-                        Location: {potholelocation}
+                        Location: {props.pothole.address}
                     </div>
                     <div className='pothole-details'>
                         <video data-testid="pothole-video" className="pothole-video" controls>
@@ -115,7 +94,7 @@ function ListEntry(props) {
             <div className='list-entry compact' id={props.id}>
                 <img src={`http://localhost:8800/api/file/${props.pothole.image}`} alt="pothole" className='pothole-image'/>
                 <div className='pothole-location'>
-                    Location: {potholelocation}
+                    Location: {props.pothole.address}
                 </div>
                 <span className='expand-button' onClick={() => setIsExpanded(!isExpanded)}>
                     <img src={expanndIcon} alt="expand" className='expand-icon'/>

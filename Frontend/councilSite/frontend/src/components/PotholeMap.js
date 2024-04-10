@@ -13,8 +13,8 @@ function PotholeMap() {
     
     const defaultProps = {
         center: {
-          lat: 51.5205,
-          lng: -0.0375
+            lat: 51.45288660799587,
+            lng: 0.1659655873913353
         },
         zoom: 15
     };

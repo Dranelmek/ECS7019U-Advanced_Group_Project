@@ -46,7 +46,7 @@ def upload_pothole(location, repairment_needed, severe_level, image_file_name, v
             print("Pothole created successfully")
 
             data = {
-                'location': location,
+                'coordinates': location,
                 'image': image_file_name,
                 'video': video_file_name,
                 'repairment_needed': repairment_needed,

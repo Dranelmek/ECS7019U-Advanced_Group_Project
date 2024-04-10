@@ -13,10 +13,10 @@ function PotholeMap() {
     
     const defaultProps = {
         center: {
-          lat: 51.5205,
-          lng: -0.0375
+          lat: 51.465725,
+          lng: 0.167183
         },
-        zoom: 15
+        zoom: 13
     };
 
     function markerColor(sev_lvl) {

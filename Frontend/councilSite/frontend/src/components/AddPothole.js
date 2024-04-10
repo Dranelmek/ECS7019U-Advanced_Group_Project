@@ -10,7 +10,7 @@ function AddPothole() {
     
     const navigate = useNavigate()
     const [loggedIn, setLoggedIn] = useContext(LoginContext)
-    const [location, setLocation] = useState("");
+    const [coordinates, setCoordinates] = useState("");
     const [repairmentNeeded, setRepairmentNeeded] = useState(false);
     const [video, setVideo] = useState(null);
     const [severe_level, setSevereLevel] = useState("");
@@ -50,7 +50,7 @@ function AddPothole() {
         
                 // Prepare the data for creating a new pothole
                 const postData = {
-                    location,
+                    coordinates,
                     video: savedVideoFileName,
                     image: savedImageFileName, 
                     severe_level,
@@ -95,8 +95,8 @@ function AddPothole() {
                         type="text" 
                         id="username" 
                         name="location" 
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
+                        value={coordinates}
+                        onChange={(e) => setCoordinates(e.target.value)}
                         className="Textfield"/><br/>
 
                         <label for="email">Video:</label><br/>

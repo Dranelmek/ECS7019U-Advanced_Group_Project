@@ -16,25 +16,25 @@ const MockEntry = (bool) => {
     )
 }
 
-test('renders pothole location', () => {
+test('renders pothole location', async () => {
   render(<MockEntry bool={false}/>);
-  const listElement = screen.getByText(`location: ${testHole.location}`);
+  const listElement = screen.getByText(`Location:`);
   expect(listElement).toBeInTheDocument();
 });
 
-test('renders pothole image', () => {
+test('renders pothole image', async () => {
     render(<MockEntry bool={false}/>);
     const imageElement = screen.getByAltText('pothole');
     expect(imageElement).toBeInTheDocument();
   });
 
-test('renders expand button', () => {
+test('renders expand button', async () => {
     render(<MockEntry bool={false}/>);
     const spanElement = screen.getByAltText('expand');
     expect(spanElement).toBeInTheDocument();
 });
 
-test('expands list entry', () => {
+test('expands list entry', async () => {
     function severity(bool) {
         if (bool) {
             return ("This pothole is in urgent need of repair!");

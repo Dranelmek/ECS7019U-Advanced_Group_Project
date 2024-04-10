@@ -11,6 +11,20 @@ function PotholeMap() {
 
     const [potholeList, setPotholeList] = useContext(PotholeContext)
     
+    useEffect(() => {
+        const  fetchPotholes = async () => {
+            const response = await fetch(
+                `${APILINK}pothole`,
+                {
+                    method: 'GET'
+                }
+            )
+            const data = await response.json()
+            setPotholeList(data)
+        }
+        fetchPotholes()
+    }, []);
+    
     const defaultProps = {
         center: {
             lat: 51.45288660799587,

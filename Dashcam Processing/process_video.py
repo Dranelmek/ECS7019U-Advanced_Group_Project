@@ -86,12 +86,13 @@ def get_gps(frame, window_dim):
     gps_e = 0
     speed = 0
 
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    window = frame[window_dim]
-    _, window = cv2.threshold(window, 200, 255, cv2.THRESH_BINARY)
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # Turn frame greyscale
+    window = frame[window_dim]  # Select window (in bottom left)
+    _, window = cv2.threshold(window, 200, 255, cv2.THRESH_BINARY)  # Apply threshold for white pixels
 
-    text = pytesseract.image_to_string(window)
+    text = pytesseract.image_to_string(window)  # use Tesseract OCR to get text
     try:
+        # Use string manipulation to get GPS and Speed from text
         last_line = text.splitlines()[-1]
         numeric_values = re.findall(r'\d+', last_line)
 
@@ -112,6 +113,7 @@ def create_video_from_frames(frames_queue, output_path, fps, frame_height, frame
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
+    # write each frame in queue into a video
     for frame_info in frames_queue:
         out.write(frame_info[0])
 
@@ -119,14 +121,14 @@ def create_video_from_frames(frames_queue, output_path, fps, frame_height, frame
 
 
 def to_video_and_upload(frames_queue, frame_rate, height, width, upload):
-    target = frames_queue[frame_rate]
-    target_name = target[1]
-    target_location = target[2]
+    target = frames_queue[frame_rate]  # make the target frame the middle frame in queue
+    target_name = target[1]  # get the frame's name (timestamp) will be Empty if not a pothole frame
+    target_location = target[2]  # get the frame's location (GPS coords) will be Empty if not a pothole frame
     vid_path = r"output_vid\\"
     img_path = r"output_img\\"
     if target_name:  # if there is a name for the frame it is a frame with a detected pothole
         create_video_from_frames(frames_queue, (vid_path + target_name + ".mp4"), frame_rate, height, width)
-        # cv2.imwrite(("img" + vid_path + target_name + ".jpg"), target[0])
+        # cv2.imwrite(("img" + vid_path + target_name + ".jpg"), target[0])  # save whole frame
 
         if upload:
             image_file_name = target_name + ".jpg"
@@ -162,8 +164,9 @@ def main(video_path, upload, to_video):
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     num_saved_frames = int(frame_rate * 2) + 1
-    frames_queue = deque(maxlen=num_saved_frames)
+    frames_queue = deque(maxlen=num_saved_frames)  # a queue to store frames
 
+    # add black frames to the queue, so it starts filled (required to let code work on potholes in the first second)
     for i in range(num_saved_frames):
         frames_queue.append([np.zeros((height, width, 3), dtype=np.uint8), "", ""])
 
@@ -187,6 +190,7 @@ def main(video_path, upload, to_video):
     model.to(device)
     min_confidence = 0.55
 
+    # loop through all frames in video
     while cap.isOpened():
         ret, frame = cap.read()
         lat = 0
@@ -197,30 +201,33 @@ def main(video_path, upload, to_video):
         if not ret:
             break
 
+        # select frame every x many frames (determined by speed
         if frame_count % int(frame_rate / processing_rate) == 0:
             print("checking this frame")
             frames_checked += 1
             if is_not_dark(frame):
                 # Get the GPS data and speed
                 lat, long, speed, failed = get_gps(frame, window_ocr_dim)
+                # Run the model
                 yolo_result = model(source=frame[window_detect_dim], conf=min_confidence, show=False)  # run on YOLO
 
                 # If pothole detected (if the output sums to something other than 0 pothole detected) and not failed
                 if (yolo_result[0].boxes.data.numel() != 0) and (not failed):
-                    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")  # get timestep to identify frames
                     location = f"{lat}; {long}"
                     print("Detected Pothole")
 
+                    # add frame with identifying timestamp and location because it contains a pothole and save image
                     frames_queue.append([frame, fr"{timestamp}{frame_count}", location])
                     yolo_result[0].save(fr"output_img\{timestamp}{frame_count}.jpg")
 
                 else:
                     print("No pothole detected")
-                    frames_queue.append([frame, "", ""])
+                    frames_queue.append([frame, "", ""])  # add frame without identifying timestamp and location
             else:
                 print("too dark for model")
                 dark_count += 1
-                frames_queue.append([frame, "", ""])
+                frames_queue.append([frame, "", ""])  # add frame without identifying timestamp and location
 
             # code to control number of frames captured per second depending on speed
             if speed > 90:
@@ -232,9 +239,9 @@ def main(video_path, upload, to_video):
 
             if failed:
                 failed_count += 1
-                processing_rate = frame_rate / 2
+                processing_rate = frame_rate / 2  # Process every other frame
         else:
-            frames_queue.append([frame, "", ""])
+            frames_queue.append([frame, "", ""])  # add frame without identifying timestamp and location
 
         if to_video:
             to_video_and_upload(frames_queue, frame_rate, height, width, upload)
@@ -244,6 +251,7 @@ def main(video_path, upload, to_video):
 
     cap.release()
 
+    # add black frames to the queue (required to let code work on potholes in the last second)
     for i in range(num_saved_frames):
         frames_queue.append([np.zeros((height, width, 3), dtype=np.uint8), "", ""])
         to_video_and_upload(frames_queue, frame_rate, height, width, upload)
@@ -256,7 +264,14 @@ def main(video_path, upload, to_video):
 
 
 if __name__ == "__main__":
+    # Information about pipeline params:
+    # upload controls whether code will try to upload to database (requires backend code to be running)
+    # to_video controls whether code will make videos, is required to be True for uploads to database
 
+    upload = False
+    to_video = True
+
+    # Create directories to store pipeline outputs
     output_directory_vid = "output_vid"
     output_directory_img = "output_img"
     if not os.path.exists(output_directory_vid):
@@ -268,29 +283,26 @@ if __name__ == "__main__":
     frames_checked_total = 0
     dark_count_total = 0
 
-    # USE ARGS
-    # parser = argparse.ArgumentParser(description='Process video')
-    # parser.add_argument('video_path', metavar='video_path', type=str, help='Path to the video file')
-    # args = parser.parse_args()
-    # result = main(args.video_path, upload=False, to_video=True)
+    # Run code on test video (used to check if pipeline runs)
+    failed_count, frames_checked, dark_count = main("testVideo.ts", upload=upload, to_video=to_video)
+    failed_count_total += failed_count
+    frames_checked_total += frames_checked
+    dark_count_total += dark_count
 
-    # USE SPECIFIC PATH
-    # failed_count, frames_checked, dark_count = main("testVideo.ts", upload=True, to_video=True)
-    # failed_count_total += failed_count
-    # frames_checked_total += frames_checked
-    # dark_count_total += dark_count
-
-    files = os.listdir("dashcam_videos")
-    for file_name in files:
-        video_path = os.path.join("dashcam_videos", file_name)
-        print(video_path)
-        failed_count, frames_checked, dark_count = main(video_path=video_path, upload=False, to_video=True)
-        failed_count_total += failed_count
-        frames_checked_total += frames_checked
-        dark_count_total += dark_count
+    # Run code on multiple videos (used to check pipeline performance)
+    # files = os.listdir("dashcam_videos")
+    # for file_name in files:
+    #     video_path = os.path.join("dashcam_videos", file_name)
+    #     print(video_path)
+    #     failed_count, frames_checked, dark_count = main(video_path=video_path, upload=upload, to_video=to_video)
+    #     failed_count_total += failed_count
+    #     frames_checked_total += frames_checked
+    #     dark_count_total += dark_count
 
     print()
     print("failed count:", failed_count_total)
     print("frames checked:", frames_checked_total)
+
+    # Delete the files created from pipeline
     # delete_files_in_folder(output_directory_vid)
     # delete_files_in_folder(output_directory_img)

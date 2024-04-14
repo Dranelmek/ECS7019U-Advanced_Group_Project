@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-import argparse
 import pytesseract
 import cv2
 import re
@@ -8,9 +7,7 @@ import os
 from ultralytics import YOLO
 import requests
 import datetime
-import time
 from collections import deque
-import sys
 
 
 def delete_files_in_folder(folder_path):

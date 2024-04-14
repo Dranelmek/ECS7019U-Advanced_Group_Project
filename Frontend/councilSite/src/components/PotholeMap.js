@@ -1,7 +1,7 @@
 import './styles/PotholeMap.css';
 import GoogleMapReact from 'google-map-react'
 import { useState, useEffect, useContext } from 'react';
-import { PotholeContext } from './App';
+import { PotholeContext, APILINK } from './App';
 import warning from "./assets/035-pothole.png";
 import m1 from './assets/marker_1.png';
 import m2 from './assets/marker_2.png';

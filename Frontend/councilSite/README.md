@@ -8,7 +8,7 @@ Counsil Webpage
 # How to use:
 
 ## from project root:
-  cd Frontend/councilsite/frontend
+  cd Frontend/councilSite
   npm start
 
     Starts the development server.

@@ -2,7 +2,7 @@
 ## Dependencies
 - Tesseract OCR https://github.com/UB-Mannheim/tesseract/wiki ver 5.3.3.20231005
 - Node.js
-
+- MongoDBCompass 
 
 # How to use:
 ### To connect to the backend server
@@ -27,6 +27,14 @@ Install python packages:
 - requests
 - datetime
 - deque from collections
+
+### To run the backend tests
+Uncomment line 18 and line 51 in the index.js file located in the backend folder.
+
+Comment out line 19 and line 52 in the index.js file located in the backend folder.
+
+cd Backend npm test 
+
 
 Change upload, to_video and video_path parameters to whatever you need.
 

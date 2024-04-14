@@ -6,14 +6,14 @@
 
 # How to use:
 ### To connect to the backend server
-cd Backend npm install
-
-cd Backend npm run
+1. cd Backend
+2. npm install
+3. npm start
 
 ### To start to the frontend site (requires backend)
-cd Frontend/councilsite/frontend npm install
-
-cd Frontend/councilsite/frontend npm run
+1. cd Frontend/councilsite
+2. npm install
+3. npm start
 
 ### To run the pipeline (upload requires backend)
 Install python packages:
@@ -28,14 +28,13 @@ Install python packages:
 - datetime
 - deque from collections
 
+Change upload, to_video and video_path parameters to whatever you need (at bottom of file).
+
+Run process_video.py
+
 ### To run the backend tests
 Uncomment line 18 and line 51 in the index.js file located in the backend folder.
 
 Comment out line 19 and line 52 in the index.js file located in the backend folder.
 
 cd Backend npm test 
-
-
-Change upload, to_video and video_path parameters to whatever you need.
-
-Run process_video.py

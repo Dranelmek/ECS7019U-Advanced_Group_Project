@@ -12,6 +12,11 @@ To run this project you will need [node](https://nodejs.org/en/download).
 
 ## from project root:
 ```bash
+  npm install
+```
+Installs all dependencies.
+
+```bash
   cd Frontend/councilSite
   npm start
 ```
@@ -39,6 +44,11 @@ Runs the test suites for the front end.
 # To start backend:
 
 ## from project root:
+```bash
+  npm install
+```
+Installs all dependencies.
+
 ```bash
   cd Backend
   npm start

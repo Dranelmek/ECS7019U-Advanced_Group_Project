@@ -34,10 +34,3 @@ Install python packages:
 Change upload, to_video and video_path parameters to whatever you need (at bottom of file).
 
 Run process_video.py
-
-### To run the backend tests
-Uncomment line 18 and line 51 in the index.js file located in the backend folder.
-
-Comment out line 19 and line 52 in the index.js file located in the backend folder.
-
-cd Backend npm test 

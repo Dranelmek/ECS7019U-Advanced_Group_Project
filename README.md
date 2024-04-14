@@ -32,12 +32,8 @@ pip install numpy
 pip install torch
 pip install pytesseract
 pip install cv2
-pip install re
-pip install os
 pip install ultralytics
 pip install requests
-pip install datetime
-pip install collections
 ```
 
 Change upload, to_video and video_path parameters to whatever you need (at bottom of file).

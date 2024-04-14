@@ -1,19 +1,20 @@
 # ECS7019U-Advanced_Group_Project
 ## Dependencies
-- Tesseract OCR https://github.com/UB-Mannheim/tesseract/wiki ver 5.3.3.20231005
-- Node.js
-- MongoDBCompass 
+- [Tesseract OCR ver 5.3.3.20231005](https://github.com/UB-Mannheim/tesseract/wiki)
+- [Node.js](https://nodejs.org/en/download)
+- [MongoDBCompass](https://www.mongodb.com/try/download/compass)
 
 # How to use:
 ### To connect to the backend server
+```bash
 cd Backend npm install
-
-cd Backend npm run
-
+npm run
+```
 ### To start to the frontend site (requires backend)
+```bash
 cd Frontend/councilsite/frontend npm install
-
-cd Frontend/councilsite/frontend npm run
+frontend npm run
+```
 
 ### To run the pipeline (upload requires backend)
 Install python packages:

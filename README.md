@@ -15,7 +15,7 @@ npm run
 ```bash
 cd Frontend 
 npm install
-frontend npm start
+npm start
 ```
 
 ### To run the pipeline (upload requires backend)

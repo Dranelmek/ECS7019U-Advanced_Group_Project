@@ -13,7 +13,7 @@ npm run
 ```
 ### To start to the frontend site (requires backend)
 ```bash
-cd Frontend/councilsite/frontend 
+cd Frontend 
 npm install
 frontend npm start
 ```

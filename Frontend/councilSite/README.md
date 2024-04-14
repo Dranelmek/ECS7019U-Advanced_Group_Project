@@ -28,8 +28,9 @@ Bundles the app into static files for production.
 Runs the test suites for the front end.
 
 # Note That:
-  The webpage makes api calls to its own back-end.
-  Running the back-end simultanuously is required for the page to function.
+  The webpage makes api calls to its own back-end.<br>
+  Running the back-end simultanuously is required <br>
+  for the page to function.<br>
   Make sure the constant "APILINK" in App.js is set to the correct path linking to the back-end.
   ```bash
     Frontend\councilSite\src\components\App.js
@@ -42,3 +43,4 @@ Runs the test suites for the front end.
   cd Backend
   npm start
 ```
+Starts back-end server.

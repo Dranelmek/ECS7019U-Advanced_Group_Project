@@ -2,41 +2,43 @@ Counsil Webpage
 ===============
 
 # Overview:
-* Website with a form that the council can fill out to interact with our database
-* will also link to the map overlay tool
+* A website for anyone to view the postholes our system has detected.
+* Council members can log into staff-accounts to remove potholes from the system.
+* A google map with indicators for pothole locations.
 
 # How to use:
+### Note:
+To run this project you will need [node](https://nodejs.org/en/download)
 
 ## from project root:
+```bash
   cd Frontend/councilSite
   npm start
+```
+Starts the development server.
 
-    Starts the development server.
-
+```bash
   npm run build
+```
+Bundles the app into static files for production.
 
-    Bundles the app into static files for production.
-
-  npm test
-
-    Starts the test runner.
-
-  npm run eject
-  
-    Removes this tool and copies build dependencies, configuration files
-    and scripts into the app directory. If you do this, you can’t go back!
+```bash
+  npm run test
+```
+Runs the test suites for the front end.
 
 # Note That:
-
-  The webpage will attempt to fetch data from the back end. 
-  If the backend isn't running it will fail and break (defensive programming not in buget)
+  The webpage makes api calls to its own back-end.
+  Running the back-end simultanuously is required for the page to function.
+  Make sure the constant "APILINK" in App.js is set to the correct path linking to the back-end.
+  ```bash
+    Frontend\councilSite\src\components\App.js
+  ```
 
 # To start backend:
 
 ## from project root:
-  
+```bash
   cd Backend
   npm start
-  
-#Thanks to:
-* me, myself, and I....no, other people you egotistical ass... Ok fine Pandora did a lot too
+```

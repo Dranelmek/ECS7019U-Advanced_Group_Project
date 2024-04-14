@@ -1,4 +1,4 @@
-Counsil Webpage
+Council Webpage
 ===============
 
 # Overview:

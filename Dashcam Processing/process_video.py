@@ -267,9 +267,11 @@ if __name__ == "__main__":
     # Information about pipeline params:
     # upload controls whether code will try to upload to database (requires backend code to be running)
     # to_video controls whether code will make videos, is required to be True for uploads to database
+    # video_path is the path to the video to be processed
 
     upload = False
     to_video = True
+    video_path = "testVideo.ts"
 
     # Create directories to store pipeline outputs
     output_directory_vid = "output_vid"
@@ -284,7 +286,7 @@ if __name__ == "__main__":
     dark_count_total = 0
 
     # Run code on test video (used to check if pipeline runs)
-    failed_count, frames_checked, dark_count = main("testVideo.ts", upload=upload, to_video=to_video)
+    failed_count, frames_checked, dark_count = main(video_path=video_path, upload=upload, to_video=to_video)
     failed_count_total += failed_count
     frames_checked_total += frames_checked
     dark_count_total += dark_count

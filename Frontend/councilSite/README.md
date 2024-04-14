@@ -8,7 +8,7 @@ Counsil Webpage
 
 # How to use:
 ### Note:
-To run this project you will need [node](https://nodejs.org/en/download)
+To run this project you will need [node](https://nodejs.org/en/download).
 
 ## from project root:
 ```bash

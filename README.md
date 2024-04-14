@@ -1,7 +1,7 @@
 # ECS7019U-Advanced_Group_Project
 ## Dependencies
-Tesseract OCR https://github.com/UB-Mannheim/tesseract/wiki ver 5.3.3.20231005
-Node.js
+- Tesseract OCR https://github.com/UB-Mannheim/tesseract/wiki ver 5.3.3.20231005
+- Node.js
 
 
 # How to use:
@@ -16,6 +16,18 @@ cd Frontend/councilsite/frontend npm install
 cd Frontend/councilsite/frontend npm run
 
 ### To run the pipeline (upload requires backend)
+Install python packages:
+- numpy
+- torch
+- pytesseract
+- cv2
+- re
+- os
+- YOLO from ultralytics
+- requests
+- datetime
+- deque from collections
+
 Change upload, to_video and video_path parameters to whatever you need.
 
 Run process_video.py

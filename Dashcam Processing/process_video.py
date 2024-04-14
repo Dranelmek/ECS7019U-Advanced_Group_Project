@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import argparse
-import pytesseract  # uses https://github.com/UB-Mannheim/tesseract/wiki
+import pytesseract
 import cv2
 import re
 import os

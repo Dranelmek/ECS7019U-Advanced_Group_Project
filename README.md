@@ -31,7 +31,7 @@ cd "Dashcam Processing"
 pip install numpy
 pip install torch
 pip install pytesseract
-pip install cv2
+pip install opencv-python
 pip install ultralytics
 pip install requests
 ```

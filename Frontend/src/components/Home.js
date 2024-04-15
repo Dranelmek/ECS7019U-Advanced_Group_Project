@@ -1,6 +1,9 @@
 import './styles/Home.css';
 
 function Home() {
+/**
+ * Generic Home page.
+ */
     return (
         <header className="Home-header">
             <div className="Page-title">

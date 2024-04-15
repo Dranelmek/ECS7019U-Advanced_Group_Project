@@ -2,13 +2,16 @@ import './styles/ListEntry.css'
 import { useState, useContext, useEffect } from 'react'
 import expanndIcon from './assets/expand-icon.png'
 import minIcon from './assets/mini-icon.png'
-import { Link } from 'react-router-dom'
 import { APILINK, LoginContext, PotholeContext } from './App'
 
 function ListEntry(props) {
+/**
+ * Component for individual list entries.
+ */
 
     const [_, setPotholeList] = useContext(PotholeContext);
 
+    // Pothole deletion handling.
     function deleteButton(bool) {
         if (bool) {
             return (<span className='delete-button' onClick={deleteAlert}>Delete</span>)
@@ -51,7 +54,7 @@ function ListEntry(props) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [loggedIn, setLoggedIn] = useContext(LoginContext)
 
-    
+    // display alternate message depending on severity
     function severity(bool) {
         if (bool) {
             return ("This pothole is in urgent need of repair!");
@@ -61,6 +64,7 @@ function ListEntry(props) {
     }
 
     if (isExpanded) {
+    // Return different object depending on if the expand button has been pressed.
         return (
             <div className='list-entry expanded' id={props.id}>
                 <div className="image-container">

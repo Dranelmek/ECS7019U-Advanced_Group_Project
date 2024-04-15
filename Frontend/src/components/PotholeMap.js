@@ -8,7 +8,9 @@ import m2 from './assets/marker_2.png';
 import m3 from './assets/marker_3.png';
 
 function PotholeMap() {
-
+/**
+ * Pothole Map page that displays a Google map with custom markers at pothole locations.
+ */
     const [potholeList, setPotholeList] = useContext(PotholeContext)
     
     useEffect(() => {
@@ -25,6 +27,7 @@ function PotholeMap() {
         fetchPotholes()
     }, []);
     
+    // Initial center of the map.
     const defaultProps = {
         center: {
             lat: 51.45288660799587,
@@ -33,23 +36,12 @@ function PotholeMap() {
         zoom: 13
     };
 
-    function markerColor(sev_lvl) {
-        switch (sev_lvl) {
-            case 1:
-                return m1;
-
-            case 2:
-                return m2;
-
-            default:
-                return m3;
-        }
-    }
-
+    // Parsing location data string.
     function latLongSplit(coordinates) {
         return String(coordinates).split(";")
     }
     
+    // Component loop to place all holes onto the map.
     let holes = [...Array(potholeList.length)].map((value, index) => (
         <img 
         id={index} 

@@ -1,15 +1,15 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { APILINK } from './App';
 import { LoginContext } from './App';
 import './styles/Register.css';
 
-
-
 function AddPothole() {
+/**
+ * This is not a user-facing page.
+ * It is a developer backdoor to manually add potholes to the database.
+ */    
     
-    const navigate = useNavigate()
-    const [loggedIn, setLoggedIn] = useContext(LoginContext)
     const [coordinates, setCoordinates] = useState("");
     const [repairmentNeeded, setRepairmentNeeded] = useState(false);
     const [video, setVideo] = useState(null);

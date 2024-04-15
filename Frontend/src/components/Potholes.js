@@ -2,13 +2,19 @@ import './styles/Potholes.css'
 import ListEntry from './ListEntry';
 import { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { APILINK, PotholeContext } from './App';
+import { PotholeContext } from './App';
 
 function Potholes() {
-    
+/**
+ * Parent component for list-entries.
+ * Displays all potholes in an expandable list.
+ * Allows logged in users to delete potholes.
+ */
+
     const [CFA, setCFA] = useState(0)
-    const [potholeList, setPotholeList] = useContext(PotholeContext)
+    const [potholeList, _] = useContext(PotholeContext)
     
+    // Setup to not display more than 5 potholes on the first page load.
     useEffect(() => {
         if (potholeList.length > 5) {
             setCFA(5)
@@ -17,6 +23,7 @@ function Potholes() {
         }
     }, [potholeList])
 
+    // Allows user to view different numbers of holes.
     function changeListSize(size) {
         if (potholeList.length < size || potholeList.length == 1) {
             return (
@@ -68,6 +75,7 @@ function Potholes() {
         setCFA(potholeList.length)
     }
 
+    // Handling for empty pothole list.
     function noHoles() {
         if (potholeList.length < 1) {
             return(
@@ -85,7 +93,7 @@ function Potholes() {
         }
     }
     
-
+    // Component loop that displays all potholes.
     let holes = [...Array(CFA)].map((value, index) => (
         <ListEntry id={index} pothole={potholeList[index]}/>
     ));

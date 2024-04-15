@@ -9,7 +9,9 @@ function projectLink() {
 }
 
 function Navbar() {
-
+/**
+ * Navbar component mounted above the App component at all times.
+ */
     const [profileTrigger, setProfileTrigger] = useState(false);
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const [user, setUser] = useContext(UserContext);

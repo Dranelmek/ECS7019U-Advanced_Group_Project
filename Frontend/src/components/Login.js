@@ -6,6 +6,9 @@ import { APILINK, LoginContext, UserContext } from './App';
 
 
 function Login() {
+/**
+ * Login form for council members' staff access.
+ */
 
     const navigate = useNavigate();
     const [user, setUser] = useState("");
@@ -13,6 +16,7 @@ function Login() {
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const [globalUser, setGUser] = useContext(UserContext);
 
+    // login handling.
     async function loginRequest() {
         const payload = {
             username: user,

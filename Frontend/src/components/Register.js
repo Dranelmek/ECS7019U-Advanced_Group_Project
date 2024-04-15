@@ -5,6 +5,11 @@ import './styles/Register.css';
 
 
 function Register() {
+/**
+ * Register page to make staff accounts for the webpage.
+ * This page cannot be accessed by regular users.
+ * In a real implementation The developers can send council members unique registration urls.
+ */
 
     const navigate = useNavigate();
     const [user, setUser] = useState("");

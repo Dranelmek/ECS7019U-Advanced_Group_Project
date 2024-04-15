@@ -11,7 +11,7 @@
 ```bash
 cd Backend 
 npm install
-npm run
+npm start
 ```
 ## To start to the frontend site (requires backend)
 ```bash
